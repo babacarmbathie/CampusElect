@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Même meta et liens que précédemment -->
+    <style>
+        :root {
+            --primary-color: #4F46E5;    /* Indigo */
+            --secondary-color: #10B981;  /* Émeraude */
+            --accent-color: #EC4899;     /* Rose */
+            --dark-bg: #1F2937;          /* Gris foncé */
+            --light-bg: #F9FAFB;         /* Gris clair */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-bg);
+        }
+
+        /* Animation des cartes */
+        .candidate-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-card img {
+            transition: transform 0.3s ease;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .candidate-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Animation du bouton de vote */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-vote {
+            background: linear-gradient(135deg, var(--primary-color), #6366F1);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-vote:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-voted {
+            background: linear-gradient(135deg, var(--secondary-color), #34D399) !important;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Animation d'entrée des cartes */
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .candidate-card {
+            animation: cardEntrance 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        /* Amélioration du modal */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), #6366F1);
+            color: white;
+        }
+
+        #modalCandidateImage {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animation d'ouverture du modal */
+        @keyframes modalOpen {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal.show .modal-dialog {
+            animation: modalOpen 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Amélioration du footer */
+        .footer {
+            background: var(--dark-bg);
+            color: white;
+            position: relative;
+        }
+
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Effet de vague amélioré */
+        .custom-shape-divider-top-1713266907 svg {
+            height: 60px;
+        }
+
+        /* Typographie améliorée */
+        h1, h2 {
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .lead {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* Effet de parallaxe */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation améliorée -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark" style="background: linear-gradient(135deg, var(--primary-color), #6366F1);">
+        <!-- Contenu identique -->
+    </nav>
+
+    <!-- Section Titre avec effet de parallaxe -->
+    <div class="parallax-bg container-fluid text-center py-5 position-relative" 
+         style="background-image: url('{{ asset('images/background.jpg') }}');
+                margin-top: 90px;
+                min-height: 400px;">
+        <div class="overlay" style="background: rgba(0, 0, 0, 0.4); position: absolute; top:0; left:0; right:0; bottom:0;"></div>
+        <div class="container position-relative z-1 text-white">
+            <h1 class="display-4 mb-4 animate__animated animate__fadeInDown">
+                Élection des Représentants Étudiants
+            </h1>
+            <div class="divider" style="width: 100px; height: 4px; background: var(--secondary-color); margin: 1rem auto;"></div>
+            <p class="lead animate__animated animate__fadeInUp animate__delay-1s">
+                Votre voix compte - Façonnez l'avenir de votre université
+            </p>
+        </div>
+    </div>
+
+    <!-- Liste des candidats avec animation de retard -->
+    <div class="container-fluid py-5" style="background-color: var(--light-bg);">
+        <div class="container">
+            <h2 class="text-center mb-5" style="color: var(--primary-color);">
+                <i class="fas fa-users me-2"></i>Nos Candidats
+            </h2>
+            <div class="row" id="candidates-list">
+                <!-- Les cartes candidates auront maintenant des animations décalées -->
+                @foreach($candidates as $candidate)
+                        @php
+                            $name = json_encode($candidate->name);
+                            // Supprimer les retours à la ligne dans le programme
+                            $program = json_encode(str_replace(["\r", "\n"], ' ', $candidate->program));
+                            $photo = json_encode($candidate->photo_path);
+                        @endphp
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 candidate-card" style="cursor:pointer;" onclick="openCandidateModal({{ $name }}, {{ $program }}, {{ $photo }}, {{ $candidate->id }})">
+                                <img src="{{ asset('images/' . $candidate->photo_path) }}" class="card-img-top" alt="Photo de {{ $candidate->name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $candidate->name }}</h5>
+                                    <p class="card-text">{{ Str::limit($candidate->program, 80) }}</p>
+                                </div>
+                            </div>
+                        </div>
+             @endforeach
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal amélioré -->
+    <div class="modal fade" id="candidateModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Ajout d'une icône de validation -->
+                    <div class="vote-checkmark d-none">
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                        </svg>
+                    </div>
+                    <!-- Reste du contenu -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ajout des icônes sociales animées -->
+    <div class="social-links text-center py-3">
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+    </div>
+
+    <style>
+        /* Animation de la coche de validation */
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+
+        /* Icônes sociales animées */
+        .social-icon {
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            color: var(--dark-bg);
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Barre de défilement personnalisée */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+    </style>
+
+    <script>
+        // Animation améliorée après vote
+        function submitVote() {
+            if(hasVoted) return;
+            
+            // Animation de la coche
+            document.querySelector('.vote-checkmark').classList.remove('d-none');
+            document.getElementById('voteButton').classList.add('d-none');
+            
+            // Confettis visuels
+            for(let i = 0; i < 30; i++) {
+                createConfetti();
+            }
+
+            // Désactivation du vote
+            hasVoted = true;
+        }
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.style = `
+                position: fixed;
+                width: 10px;
+                height: 10px;
+                background: ${Math.random() > 0.5 ? var(--primary-color) : var(--accent-color)};
+                top: ${Math.random() * 100}%;
+                left: ${Math.random() * 100}%;
+                border-radius: 2px;
+                animation: confettiFall ${1 + Math.random() * 2}s linear;
+                z-index: 9999;
+            `;
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 2000);
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+body {
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-image: url('../images/ugb.jpg'); /* Chemin vers l'image */
+    background-size: cover; /* Couvre toute la page */
+    background-position: center; /* Centre l'image */
+    background-repeat: no-repeat; /* Empêche la répétition */
+    background-attachment: fixed; /* Fixe l'image lors du défilement */
+  }
+  
+  .parallax {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+  }
+  
+  .ivote-logo {
+    width: 250px;
+  }
+  
+  #index-PUPSRC {
+    color: white;
+    text-shadow: 
+      -2px -1px 0 #8B4513, 2px -1px 0 #8B4513, -2px 1px 0 #8B4513, 2px 1px 0 #8B4513,
+      -1px 0 0 #8B4513, 1px 0 0 #8B4513, 0 -1px 0 #8B4513, 0 1px 0 #8B4513,
+      2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 800;
+  }
+  
+  #index-AES {
+    color: white;
+    text-shadow: 
+      -2px -1px 0 #8B4513, 2px -1px 0 #8B4513, -2px 1px 0 #8B4513, 2px 1px 0 #8B4513,
+      -1px 0 0 #8B4513, 1px 0 0 #8B4513, 0 -1px 0 #8B4513, 0 1px 0 #8B4513,
+      2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 800;
+  }
+  
+  .index-button {
+    background-color: #8B4513; /* Marron foncé */
+    font-weight: bold;
+    padding: 1% 3%;
+    color: white;
+    border: none;
+    font-size: large;
+    transition: ease-in-out all 0.3s;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .index-button:hover {
+    transform: scale(1.1);
+    background-color: #D2B48C; /* Marron clair au survol */
+  }
+  
+  .landing-organization-title {
+    color: white;
+    font-weight: bold;
+    background-color: rgba(139, 69, 19, 0.9); /* Marron foncé semi-transparent */
+    padding: 15px 30px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  .landing-organization-subtitle {
+    text-align: center;
+    padding-bottom: 20px;
+    color: white;
+    background-color: rgba(210, 180, 140, 0.9); /* Marron clair semi-transparent */
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Styles pour la barre de navigation (navbar) */
+/* Styles pour la barre de navigation (navbar) */
+#mainNav {
+    background: linear-gradient(135deg, #8B4513, #A0522D); /* Dégradé marron */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    transition: background 0.3s ease;
+  }
+  
+  #mainNav.scrolled {
+    background: rgba(139, 69, 19, 0.9); /* Marron foncé semi-transparent */
+  }
+  
+  .navbar-brand img {
+    width: 80px; /* Ajustez la taille du logo */
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar-brand img:hover {
+    transform: scale(1.1); /* Effet de zoom au survol */
+  }
+  
+  .navbar-toggler {
+    border-color: white; /* Bordure blanche */
+    transition: background 0.3s ease;
+  }
+  
+  .navbar-toggler:hover {
+    background: rgba(255, 255, 255, 0.1); /* Fond légèrement blanc au survol */
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  .navbar .nav-link {
+    color: white !important; /* Texte blanc */
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+    position: relative;
+    margin: 0 10px;
+  }
+  
+  .navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #D2B48C; /* Marron clair */
+    bottom: -5px;
+    left: 0;
+    transition: width 0.3s ease;
+  }
+  
+  .navbar .nav-link:hover::after {
+    width: 100%; /* Effet de soulignement au survol */
+  }
+  
+  .navbar .nav-link:hover {
+    color: #D2B48C !important; /* Marron clair au survol */
+    transform: translateY(-2px); /* Effet de déplacement vers le haut */
+  }
+  
+  .navbar .nav-link.active {
+    color: #D2B48C !important; /* Marron clair pour l'élément actif */
+    font-weight: bold;
+  }
+  
+  .navbar-text {
+    color: white !important; /* Texte blanc */
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-text:hover {
+    color: #D2B48C !important; /* Marron clair au survol */
+  }
+  
+  /* Animation pour le défilement */
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  #mainNav {
+    animation: fadeInDown 0.5s ease-out;
+  }
+  .footer {
+    background: linear-gradient(135deg, #D2B48C, #8B4513); /* Dégradé marron clair à marron foncé */
+    color: white;
+    padding: 40px 20px;
+  }
+  
+  .footer a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .footer-body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .footer-left img {
+    max-width: 200px;
+  }
+  
+  .footer-middle a, 
+  .footer-right p, 
+  .footer-right a {
+    display: block;
+    margin: 5px 0;
+  }
+  
+  .connect-with-us-footer {
+    width: 30px;
+    margin-right: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .index-button {
+      margin-top: 3%;
+      padding: 3%;
+    }
+  }
