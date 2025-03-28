@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: campus-elect
+    env: php
+    region: oregon
+    plan: free
+    buildCommand: |
+      apt-get update && apt-get install -y unzip
+      composer install
+      php artisan key:generate
+    startCommand: php artisan serve --host=0.0.0.0 --port 10000
+    envVars:
+      - key: PORT
+        value: 10000
+
