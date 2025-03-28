@@ -103,7 +103,7 @@
           @endphp
           <div class="col-md-4 mb-4">
             <div class="card h-100 candidate-card" style="cursor:pointer;" onclick="openCandidateModal({{ $name }}, {{ $program }}, {{ $photo }}, {{ $candidate->id }})">
-              <img src="{{ asset('images/' . $candidate->photo_path) }}" class="card-img-top mx-auto d-block" alt="Photo de {{ $candidate->name }}">
+              <img src="{{ asset('storage/' . $candidate->photo_path) }}" class="card-img-top mx-auto d-block" alt="Photo de {{ $candidate->name }}">
               <div class="card-body d-flex align-items-center justify-content-between">
                 <div>
                   <h5 class="card-title mb-1">
