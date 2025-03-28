@@ -58,4 +58,3 @@ class VoteController extends Controller
         return response()->json(['success' => true, 'message' => 'Merci d\'avoir voté !']);
     }
 }
-

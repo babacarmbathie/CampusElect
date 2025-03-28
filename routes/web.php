@@ -7,10 +7,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
-// Route d'accueil
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
+})->name('welcome');  
+
+Route::get('/admin/candidats/data', function() {
+    $candidats = App\Models\User::where('role', 'candidate')->with('candidate')->paginate(10);
+    return view('admin.partials.candidats', compact('candidats'));
+})->name('admin.candidats.data');
 
 // Routes étudiant
 Route::prefix('student')->group(function () {
@@ -26,7 +30,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vote', [CandidateController::class, 'index'])->name('vote.index');
     Route::post('/vote', [VoteController::class, 'store'])->name('vote.store');
 });
-
 // Routes admin
 Route::prefix('admin')->group(function () {
     // Dashboard admin
@@ -41,12 +44,12 @@ Route::prefix('admin')->group(function () {
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('admin.etudiants.destroy');
     });
 
-    // Gestion des candidats
-    Route::get('/candidats/data', function() {
-        $candidats = App\Models\User::where('role', 'candidate')->with('candidate')->paginate(10);
-        return view('admin.partials.candidats', compact('candidats'));
-    })->name('admin.candidats.data');
-    Route::post('/candidates', [CandidateController::class, 'store'])->name('candidates.store');
+   // Gestion des candidats
+   Route::get('/candidats/data', function() {
+    $candidats = App\Models\User::where('role', 'candidate')->with('candidate')->paginate(10);
+    return view('admin.partials.candidats', compact('candidats'));
+})->name('admin.candidats.data');
+Route::post('/candidates', [CandidateController::class, 'store'])->name('candidates.store');
 });
 
 // Pour les besoins de développement - A supprimer en production
