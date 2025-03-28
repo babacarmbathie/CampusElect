@@ -57,4 +57,33 @@ class VoteController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Merci d\'avoir voté !']);
     }
+
+    public function progress()
+    {
+        // Récupérer l'élection en cours
+        $currentElection = Election::where('status', 1)->first();
+        if (!$currentElection) {
+            return response()->json([]);
+        }
+
+        // Calculer le total des votes pour cette élection
+        $totalVotes = Vote::where('election_id', $currentElection->id)->count();
+
+        // Récupérer les candidats pour cette élection
+        $candidates = Candidate::where('election_id', $currentElection->id)->get();
+        $progress = [];
+
+        foreach ($candidates as $candidate) {
+            $candidateVotes = Vote::where('candidate_id', $candidate->id)->count();
+            $vote_percentage = $totalVotes > 0 ? round(($candidateVotes / $totalVotes) * 100) : 0;
+            $progress[] = [
+                'candidate_id'   => $candidate->id,
+                'vote_percentage'=> $vote_percentage,
+            ];
+        }
+
+        return response()->json($progress);
+    }
+
 }
+

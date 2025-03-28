@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/vote.css') }}">
   <style>
-    /* Améliorations pour le bouton voté */
+    /* Bouton voté en vert */
     .btn-voted {
       background-color: #28a745 !important;
       border-color: #28a745 !important;
@@ -19,47 +19,76 @@
       max-height: 200px;
       overflow-y: auto;
     }
+    .progress {
+      height: 20px;
+      background-color: #f0f0f0;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+      width: calc(100% - 20px); /* Assurez-vous que toutes les barres ont la même largeur et évitent les débordements */
+      margin: 0 auto 10px auto; /* Centrer horizontalement et ajouter une marge en bas */
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(45deg, #5E2C1A, #8B4513);
+        color: #ffffff;
+      font-weight: 600;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+      transition: width 0.5s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.2) 50%,
+        rgba(255,255,255,0.2) 75%,
+        transparent 75%
+      );
+      background-size: 25px 25px;
+      animation: move 2s linear infinite;
+      z-index: 1;
+    }
+    @keyframes move {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 50px 50px;
+      }
+    }
+    /* Style pour le conteneur de la carte */
+    .candidate-card {
+      transition: transform 0.2s ease-in-out;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .candidate-card:hover {
+      transform: translateY(-5px);
+    }
+    /* Style pour le pourcentage */
+    .progress-bar span {
+      position: relative;
+      z-index: 2;
+    }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg fixed-top navbar-dark" id="mainNav" style="background: linear-gradient(135deg, #5E2C1A, #8E4B3A);">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="#" style="font-size: 1.8rem; font-weight: bold; color: white;">
-        <img src="{{ asset('ugb.jpg') }}" id="ivote-logo-landing-header" alt="iVote Logo" class="img-fluid me-3" style="height: 50px;">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: white;">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item fw-medium">
-            <a class="nav-link text-white" href="{{ route('welcome') }}">Welcome</a>
-          </li>
-          <li class="nav-item fw-medium">
-            <a class="nav-link text-white" href="{{ route('welcome') }}">Welcome Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active text-white" href="{{ route('welcome') }}">Register</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Section Titre -->
-  <div class="container-fluid text-center py-5 position-relative" style="background-color: #8E4B3A; margin-top: 90px; overflow: hidden;">
-    <div class="container position-relative z-1">
-      <h1 class="display-4 mb-3" style="color: white; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
-        Élection des Représentants Étudiants
-      </h1>
-      <p class="lead" style="font-size: 1.25rem; color: #f8f9fa;">
-        Choisissez le candidat qui représente vos idées et vos valeurs.
-      </p>
-    </div>
-    <svg class="position-absolute bottom-0 start-0 w-100" viewBox="0 0 1440 100" preserveAspectRatio="none" style="height: 50px; fill: #ffffff;">
-      <path d="M0,0V100H1440V0C1200,100 800,100 400,100C200,100 100,100 0,0Z"></path>
-    </svg>
-  </div>
+  <!-- ... votre navbar, section titre, etc ... -->
 
   <!-- Liste des candidats -->
   <div class="container-fluid py-5" style="background-color: #ffffff;">
@@ -69,23 +98,31 @@
         @foreach($candidates as $candidate)
           @php
             $name = json_encode($candidate->name);
-            // Nettoyer les retours à la ligne du programme
             $program = json_encode(str_replace(["\r", "\n"], ' ', $candidate->program));
             $photo = json_encode($candidate->photo_path);
           @endphp
           <div class="col-md-4 mb-4">
             <div class="card h-100 candidate-card" style="cursor:pointer;" onclick="openCandidateModal({{ $name }}, {{ $program }}, {{ $photo }}, {{ $candidate->id }})">
-              <img src="{{ asset('images/' . $candidate->photo_path) }}" class="card-img-top" alt="Photo de {{ $candidate->name }}">
-              <div class="card-body">
-                <h5 class="card-title">{{ $candidate->name }}</h5>
-                <p class="card-text">{{ Str::limit($candidate->program, 80) }}</p>
-                <!-- Progression des votes -->
-                <div class="progress mt-2">
-                  <div class="progress-bar" role="progressbar" style="width: {{ $candidate->vote_percentage ?? 0 }}%;" aria-valuenow="{{ $candidate->vote_percentage ?? 0 }}" aria-valuemin="0" aria-valuemax="100">
-                    {{ $candidate->vote_percentage ?? 0 }}%
-                  </div>
+              <img src="{{ asset('images/' . $candidate->photo_path) }}" class="card-img-top mx-auto d-block" alt="Photo de {{ $candidate->name }}">
+              <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                  <h5 class="card-title mb-1">
+                    {{ $candidate->name }}
+                    @if($vote && $vote->candidate_id === $candidate->id)
+                      <i class="fas fa-check-circle text-success ms-2"></i>
+                    @endif
+                  </h5>
+                  <p class="card-text mb-2">{{ Str::limit($candidate->program, 80) }}</p>
                 </div>
               </div>
+              @if($vote)
+                <!-- Affichage de la progress bar uniquement si l'étudiant a voté -->
+                <div class="progress mt-2" style="flex-grow: 1; margin-left: 10px;">
+                  <div id="progress-{{ $candidate->id }}" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <span>0%</span>
+                  </div>
+                </div>
+              @endif
             </div>
           </div>
         @endforeach
@@ -124,18 +161,26 @@
     let votedCandidateId = {{ $vote ? $vote->candidate_id : 'null' }};
     // ID de l'élection en cours
     let currentElectionId = {{ $currentElection->id }};
-    // Variable pour stocker l'ID du candidat en cours d'affichage dans le modal
+    // Stocker l'ID du candidat en cours dans le modal
     let currentCandidateId = null;
   </script>
 
   <!-- Scripts JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Initialiser les barres de progression au chargement de la page
+    document.addEventListener('DOMContentLoaded', function() {
+      if (hasVoted) {
+        updateProgressBars();
+        // Mettre à jour toutes les 5 secondes
+        setInterval(updateProgressBars, 5000);
+      }
+    });
+
     // Fonction d'ouverture du modal pour afficher les informations du candidat
     function openCandidateModal(name, program, photo, candidateId) {
       currentCandidateId = candidateId;
       let voteBtn = document.getElementById('voteButton');
-      // Réinitialisation du bouton
       voteBtn.classList.remove('btn-voted');
       voteBtn.innerText = 'Voter';
       voteBtn.disabled = false;
@@ -146,15 +191,13 @@
       document.getElementById('modalCandidateImage').src = "{{ asset('images') }}/" + photo;
       document.getElementById('modalCandidateProgram').innerText = program;
       
-      // Si l'utilisateur a déjà voté
+      // Si l'utilisateur a déjà voté, désactiver le bouton sauf si c'est le candidat pour lequel il a voté
       if (hasVoted) {
-        // Seul le candidat pour lequel il a voté affichera "Voté"
         if (candidateId === votedCandidateId) {
           voteBtn.classList.add('btn-voted');
-          voteBtn.innerText = 'Voté';
+          voteBtn.innerText = 'Vous avez voté pour ce candidat';
           voteBtn.disabled = true;
         } else {
-          // Pour les autres, le bouton reste désactivé sans l'état "voté"
           voteBtn.innerText = '->';
           voteBtn.disabled = true;
         }
@@ -165,7 +208,7 @@
       candidateModal.show();
     }
 
-    // Fonction qui affiche une confirmation avant de voter
+    // Fonction de confirmation du vote
     function confirmVote() {
       if (window.confirm("Confirmez-vous votre vote ?")) {
         submitVote();
@@ -175,7 +218,6 @@
     // Fonction pour envoyer le vote via AJAX
     function submitVote() {
       if (hasVoted) return;
-
       const voteData = {
         candidate_id: currentCandidateId,
         election_id: currentElectionId,
@@ -208,6 +250,11 @@
           let voteMsg = document.getElementById('voteMessage');
           voteMsg.classList.remove('d-none');
           voteMsg.innerText = data.message || "Merci d'avoir voté pour ce candidat !";
+
+          // Mettre à jour immédiatement après le vote
+          updateProgressBars();
+          // Démarrer les mises à jour régulières
+          setInterval(updateProgressBars, 2000);
         } else {
           alert(data.error || "Une erreur est survenue lors de l'enregistrement de votre vote.");
         }
@@ -217,6 +264,36 @@
         alert(error.error || "Une erreur est survenue. Veuillez réessayer.");
       });
     }
+
+    // Fonction AJAX pour mettre à jour les progressions avec gestion d'erreur améliorée
+    function updateProgressBars() {
+        fetch("{{ route('vote.progress') }}")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    console.error("Format de données invalide");
+                    return;
+                }
+            data.forEach(item => {
+                let progressBar = document.getElementById('progress-' + item.candidate_id);
+                if (progressBar) {
+                        // Animation fluide de la barre de progression
+                        progressBar.style.transition = 'width 0.5s ease-in-out';
+                progressBar.style.width = item.vote_percentage + "%";
+                progressBar.setAttribute("aria-valuenow", item.vote_percentage);
+                        progressBar.querySelector('span').innerText = item.vote_percentage + "%";
+                }
+            });
+            })
+            .catch(error => {
+            console.error("Erreur lors de la mise à jour des progressions:", error);
+            });
+}
   </script>
 </body>
 </html>
