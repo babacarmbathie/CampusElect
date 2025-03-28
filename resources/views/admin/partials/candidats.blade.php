@@ -103,7 +103,7 @@
                                     {{ $candidate->election->title ?? 'N/A' }}
                                 </span>
                                 <p class="text-muted text-truncate">
-                                    {{ Str::limit($candidate->program, 60) }}
+                                    <!-- {{ Str::limit($candidate->program, 60) }} -->
                                 </p>
                             </div>
                             <div class="card-footer bg-transparent border-0 pt-0 pb-3">

@@ -4,11 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>iVote - Université Gaston Berger</title>
+  <title>CampusElect - Université Gaston Berger</title>
+  <!-- Favicon -->
+  <link rel="icon" href="{{ asset('logo.svg') }}" type="image/svg+xml">
   <!-- Fontawesome Link for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/accueil.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   <!-- Montserrat Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,8 +23,8 @@
   <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="ugb.jpg" id="ivote-logo-landing-header" alt="iVote Logo" class="navbar-logo me-2">
-        <span class="navbar-brand-text">Université Gaston Berger</span>
+        <x-logo class="navbar-logo me-2" style="width: 50px; height: auto;" />
+        <span class="navbar-brand-text">CAMPUS ELECT</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -29,13 +32,13 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarText">
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="landing-page.php">Accueil</a>
+            <a class="nav-link active" aria-current="page" href="{{ route('welcome') }}">Accueil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="about-us.php">À propos</a>
+            <a class="nav-link" href="{{ route('welcome') }}">À propos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="register.php">S'inscrire</a>
+            <a class="nav-link" href="{{ route('student.login') }}">Se connecter</a>
           </li>
         </ul>
       </div>
@@ -124,9 +127,9 @@
       <div class="row">
         <div class="col-md-6 footer-left pt-xl-4 px-xl-5 d-flex justify-content-center flex-column">
           <div>
-            <img src="images/resc/senegal_vote.png" class="img-fluid ivote-logo" id="footer" alt="Vote Sénégal">
-            <p>Plateforme d'information sur les élections et la citoyenneté au Sénégal.</p>
-            <p class="credits-footer" id="credits"><span class="hello-text">© 2024 Info Vote Sénégal.</span> Tous droits réservés.</p>
+            <x-logo class="img-fluid" style="width: 120px; height: auto;" />
+            <p>Plateforme de vote électronique pour les élections universitaires.</p>
+            <p class="credits-footer" id="credits"><span class="hello-text">© 2024 CampusElect.</span> Tous droits réservés.</p>
             <div class="vertical-line"></div>
           </div>
         </div>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond avec dégradé -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D2B48C;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Cercle de fond avec dégradé -->
+  <circle cx="25" cy="25" r="23" fill="url(#grad1)" />
+  <circle cx="25" cy="25" r="21" fill="#FFFFFF" />
+  
+  <!-- Bâtiment universitaire stylisé avec ombre -->
+  <g filter="url(#shadow)">
+    <defs>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+        <feOffset dx="1" dy="1" result="offsetblur"/>
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.3"/>
+        </feComponentTransfer>
+        <feMerge> 
+          <feMergeNode/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    
+    <!-- Structure principale -->
+    <path d="M15 15 L25 10 L35 15 L35 32 L15 32 Z" fill="#8B4513"/>
+    
+    <!-- Colonnes -->
+    <rect x="17" y="15" width="3" height="17" fill="#D2B48C" />
+    <rect x="24" y="15" width="3" height="17" fill="#D2B48C" />
+    <rect x="31" y="15" width="3" height="17" fill="#D2B48C" />
+    
+    <!-- Détails architecturaux -->
+    <path d="M14 15 L36 15" stroke="#D2B48C" stroke-width="1"/>
+    <path d="M25 8 L25 12" stroke="#D2B48C" stroke-width="1"/>
+  </g>
+  
+  <!-- Urne de vote stylisée avec effet 3D -->
+  <g transform="translate(21,28)">
+    <rect x="0" y="0" width="8" height="8" fill="#8B4513" rx="1"/>
+    <rect x="0.5" y="0.5" width="7" height="7" fill="#FFFFFF" rx="0.5"/>
+    <rect x="3" y="-1.5" width="2" height="1.5" fill="#8B4513"/>
+    <path d="M 2 4 L 6 4" stroke="#8B4513" stroke-width="0.5" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Initiales CE stylisées -->
+  <text x="25" y="42" font-family="Montserrat, sans-serif" font-size="8" font-weight="bold" text-anchor="middle" fill="#8B4513">CE</text>
+  
+  <!-- Effet de brillance global -->
+  <circle cx="18" cy="18" r="3" fill="#FFFFFF" opacity="0.1"/>
+</svg> 
