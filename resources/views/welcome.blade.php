@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8">
@@ -10,12 +10,254 @@
   <!-- Fontawesome Link for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/accueil.css') }}">
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   <!-- Montserrat Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --marron-fonce: #5D4037;
+      --marron-moyen: #8D6E63;
+      --marron-clair: #D7CCC8;
+      --beige: #EFEBE9;
+      --blanc: #FFFFFF;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+      background-color: var(--beige);
+    }
+
+    /* Navigation */
+    #mainNav {
+      background: linear-gradient(90deg, var(--marron-fonce), var(--marron-moyen));
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .navbar-brand-text {
+      color: var(--blanc);
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .nav-link {
+      color: var(--marron-clair);
+      font-weight: 500;
+      margin: 0 10px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--blanc);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      background: url('{{ asset("images/ugb_bg.jpg") }}') no-repeat center/cover;
+      color: white;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    /* Bouton principal */
+    .cta-button {
+      background: var(--marron-moyen);
+      color: var(--blanc);
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-weight: 600;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .cta-button:hover {
+      background: var(--marron-fonce);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Section Organisations */
+    .organizations {
+      padding: 80px 0;
+      background: var(--blanc);
+    }
+
+    .org-card {
+      background: var(--blanc);
+      border-radius: 15px;
+      padding: 30px;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      height: 100%;
+      border: 1px solid var(--marron-clair);
+    }
+
+    .org-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+
+    .org-logo {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .org-card:hover .org-logo {
+      transform: scale(1.1);
+    }
+
+    /* Footer */
+    .footer {
+      position: relative;
+      background: linear-gradient(135deg, var(--marron-fonce), var(--marron-moyen));
+      color: var(--blanc);
+      padding-top: 100px;
+    }
+
+    .footer-divider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+    }
+
+    .footer-divider svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 100px;
+    }
+
+    .footer-divider .shape-fill {
+      fill: var(--blanc);
+    }
+
+    .footer-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-logo {
+      filter: brightness(0) invert(1);
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      color: var(--marron-clair);
+      transition: all 0.3s ease;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer-links a:hover {
+      color: var(--blanc);
+      transform: translateX(5px);
+      text-decoration: none;
+    }
+
+    .social-icon {
+      width: 35px;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .org-btn img {
+        width: 80px;
+        height: auto;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .org-btn:hover img {
+        transform: scale(1.2);
+    }
+
+    /* Animation de la bordure */
+    .org-btn::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        z-index: -1;
+        background: linear-gradient(45deg, var(--marron-clair), var(--marron-fonce));
+        border-radius: 15px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .org-btn:hover::before {
+        opacity: 1;
+    }
+
+    /* Texte */
+    .org-btn h4 {
+        color: var(--marron-fonce);
+        margin-top: 10px;
+    }
+
+    .org-btn p {
+        margin-bottom: 0;
+    }
+    }
+  </style>
 </head>
 
 <body id="index-body">
@@ -35,8 +277,7 @@
             <a class="nav-link active" aria-current="page" href="{{ route('welcome') }}">Accueil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('welcome') }}">À propos</a>
-          </li>
+          <a class="nav-link" href="{{ route('about') }}">À propos</a>          </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ route('student.login') }}">Se connecter</a>
           </li>
@@ -46,15 +287,20 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="parallax">
-    <div class="container">
+  <section class="hero-section">
+    <div class=""></div>
+    <div class="container hero-content">
       <div class="row">
-        <div class="col text-center text-white">
-          <h5 id="index-PUPSRC" class="text-truncate mt-3">
+        <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+          <h5 class="hero-subtitle mb-3">
             UNIVERSITÉ GASTON BERGER DE SAINT-LOUIS
           </h5>
-          <h1 class="" id="index-AES">Vote Automatique de l'UFR SAT</h1>
-          <a href="#organizations" type="button" class="btn btn-primary fw-bold index-button">Sélectionner votre UFR</a>
+          <h1 class="hero-title mb-4">
+            Vote Électronique de l'UFR <span style="color: var(--marron-clair)">SAT</span>
+          </h1>
+          <a href="#organizations" class="btn cta-button">
+            Sélectionner votre UFR <i class="fas fa-arrow-right ms-2"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -62,59 +308,49 @@
 
   <!-- Organizations Section -->
   <section id="organizations" class="organizations">
-    <form action="includes/classes/landing-page-controller.php" method="post">
-      
-    <div class="container-fluid">
-          <div class="row justify-content-center text-center">
-            <div class="col-md-3 mb-4">
-              <button type="submit" name="submit_btn" value="vote" class="landing-page-org-card" id="SCO-landing-logo">
-                <img src="ugb.jpg" alt="SCO Logo" class="landing-page-logo-size">
-                <h5 class="fw-bold pt-2 text-capitalize">SAT</h5>
-              </button>
-            </div>
-          </div>
+  <div class="container">
+    <!-- Première carte centrée -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- Trois cartes alignées en bas -->
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
         </div>
 
-        <div class="container-fluid">
-          <div class="row justify-content-center text-center">
-            <div class="col-md-3 mb-4" id="index-ACAP">
-              <button type="submit" name="submit_btn" value="SAT" class="landing-page-org-card" id="ACAP-landing-logo">
-                <img src="images/logos/acap.png" alt="ACAP Logo" class="landing-page-logo-size">
-                <h5 class="fw-bold pt-2 text-uppercase">SAT</h5>
-              </button>
-            </div>
-
-            <div class="col-md-3 mb-4" id="index-AECES">
-              <button type="submit" name="submit_btn" value="SAT" class="landing-page-org-card" id="AECES-landing-logo">
-                <img src="images/logos/aeces.png" alt="AECES Logo" class="landing-page-logo-size">
-                <h5 class="fw-bold pt-2 text-uppercase">SAT</h5>
-              </button>
-            </div>
-
-            <div class="col-md-3 mb-4" id="index-AECES">
-              <button type="submit" name="submit_btn" value="S2ATA" class="landing-page-org-card" id="ELITE-landing-logo">
-                <img src="images/logos/elite.png" alt="ELITE Logo" class="landing-page-logo-size">
-                <h5 class="fw-bold pt-2 text-uppercase">S2ATA</h5>
-              </button>
-            </div>
-          </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
         </div>
 
-        <div class="container-fluid">
-          <div class="row justify-content-center text-center">
-           
-            
-
-          </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
         </div>
+    </div>
+</div>
 
-       
-        </div>
-      </div>
-    </form>
   </section>
 
-  <!-- Footer -->
+   <!-- Footer -->
   <footer class="footer">
     <div class="custom-shape-divider-top-1713266907">
       <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -161,25 +397,32 @@
     </div>
   </footer>
 
-  <!-- Bootstrap Bundle with Popper -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-
-  <!-- JavaScript for dynamic text change -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  
+  
   <script>
-    const indexPUPSRC = document.getElementById('index-PUPSRC');
-
-    function updateText() {
-      if (window.innerWidth <= 768) {
-        indexPUPSRC.textContent = 'UGB SAINT-LOUIS';
+    // Initialisation AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out-quad',
+      once: true
+    });
+    
+    // Effet de rétrécissement de la navbar au scroll
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('mainNav');
+      if (window.scrollY > 50) {
+        navbar.style.padding = '10px 0';
+        navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
       } else {
-        indexPUPSRC.textContent = 'UNIVERSITÉ GASTON BERGER DE SAINT-LOUIS';
+        navbar.style.padding = '15px 0';
+        navbar.style.boxShadow = 'none';
       }
-    }
-
-    window.addEventListener('load', updateText);
-    window.addEventListener('resize', updateText);
+    });
   </script>
 </body>
-
 </html>

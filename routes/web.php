@@ -7,6 +7,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
+
+// Route pour la page "À Propos"
+Route::get('/a-propos', function () {
+    return view('about'); // Assurez-vous que le fichier about.blade.php existe dans resources/views/
+})->name('about');
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');  
