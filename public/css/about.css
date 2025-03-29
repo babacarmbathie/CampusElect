@@ -1,0 +1,87 @@
+/* Import de la police Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Styles spécifiques à la page About */
+.bg-brown {
+    background-color: var(--marron-fonce) !important;
+}
+
+.text-brown {
+    color: var(--marron-fonce) !important;
+}
+
+.bg-light-brown {
+    background-color: var(--marron-moyen) !important;
+}
+
+/* Styles de base */
+.about-section {
+    padding-top: 120px;
+    padding-bottom: 80px;
+    background-color: var(--blanc);
+}
+
+/* Styles des sections */
+.section {
+    margin-bottom: 30px;
+    background: linear-gradient(to bottom, var(--blanc), var(--beige));
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(var(--marron-fonce-rgb), 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.section:hover {
+    box-shadow: 0 6px 12px rgba(var(--marron-fonce-rgb), 0.15);
+}
+
+/* Styles de l'équipe */
+.team-member {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid var(--marron-clair);
+    border-radius: 8px;
+    background: linear-gradient(to bottom, var(--beige), var(--blanc));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+}
+
+.team-member img {
+    width: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(var(--marron-fonce-rgb), 0.15);
+}
+
+.team-member h3 {
+    color: var(--marron-fonce);
+    margin-bottom: 5px;
+}
+
+.team-member p {
+    color: var(--marron-moyen);
+    line-height: 1.6;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .about-section {
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+
+    .team-member {
+        padding: 10px;
+    }
+
+    .team-member img {
+        width: 80px;
+    }
+} 

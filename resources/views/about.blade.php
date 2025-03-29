@@ -1,170 +1,140 @@
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>À Propos de Nous</title>
-    <link rel="stylesheet" href="style.css">
+    <title>À propos - CampusElect</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('logo.svg') }}" type="image/svg+xml">
+    <!-- Fontawesome Link for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Montserrat Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/about.css') }}">
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/confetti/2.7.2/confetti.min.js"></script>
     <script src="https://unpkg.com/swup@4"></script>
-    <script src="config.js" type="module"></script>
-    <script src="script.js" type="module"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-        <file-changes>
-```css
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f5f9;
-    color: #2c3e50;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.bg-brown {
-    background-color: #6B451D !important;
-}
-
-.text-brown {
-    color: #6B451D !important;
-}
-
-.bg-light-brown {
-    background-color: #A0785A !important;
-}
-
-header {
-    background: linear-gradient(to right, #6B451D, #A0785A);
-    color: #fff;
-    padding: 1.5em 0;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s;
-}
-
-main {
-    padding: 30px;
-}
-
-section {
-    margin-bottom: 30px;
-    background: linear-gradient(to bottom, #fff, #f9f9f9);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s;
-}
-
-section:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.team-member {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #ecf0f1;
-    border-radius: 8px;
-    background: linear-gradient(to bottom, #f9f9f9, #fff);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: transform 0.2s;
-}
-
-.team-member:hover {
-    transform: translateY(-5px);
-}
-
-.team-member img {
-    width: 100px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-.team-member h3 {
-    color: #34495e;
-    margin-bottom: 5px;
-}
-
-.team-member p {
-    color: #7f8c8d;
-    line-height: 1.6;
-}
-
-
-footer {
-    text-align: center;
-    padding: 1.5em 0;
-    background: linear-gradient(to right, #A0785A, #6B451D);
-    color: #fff;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s;
-}
-
-
-    </style>
 </head>
 
-<body class="bg-light">
-    <header class="bg-brown text-white text-center py-3">
-        <h1>À Propos de Nous</h1>
-        <p>Créateurs de la plateforme de vote en ligne</p>
-    </header>
+<body>
+    <!-- Navigation Bar -->
+    @include('components.nav')
 
-    <main id="swup" class="container my-4">
-        <section id="presentation" class="bg-white p-4 rounded shadow">
-            <h2>Notre Équipe</h2>
+    <!-- Main Content -->
+    <main class="about-section">
+        <div class="container py-5">
             <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="team-member text-center">
-                        <img src="https://avatars.githubusercontent.com/u/65403571?v=4" alt="Babacar MBathie"
-                            class="img-fluid rounded-circle mb-3" style="width: 100px;">
-                        <h3>Babacar MBathie</h3>
-                        <p>Étudiant Entrepreneur, ingénieur informatique et en agriculture.</p>
-                        <p>Téléphone: 761917181</p>
+                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                    <h1 class="mb-4">À propos de CampusElect</h1>
+                    <p class="lead mb-4">
+                        CampusElect est la plateforme de vote électronique officielle de l'Université Gaston Berger de Saint-Louis.
+                        Notre mission est de faciliter et de sécuriser le processus électoral au sein de notre communauté universitaire.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt mb-3"></i>
+                        <h3>Sécurisé</h3>
+                        <p>Système de vote hautement sécurisé avec authentification à deux facteurs et cryptage des données.</p>
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <div class="team-member text-center">
-                        <img src="https://avatars.githubusercontent.com/u/65403571?v=4" alt="Pape Doukoum TINE"
-                            class="img-fluid rounded-circle mb-3" style="width: 100px;">
-                        <h3>Pape Doukoum TINE</h3>
-                        <p>Description à venir...</p>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card">
+                        <i class="fas fa-user-check mb-3"></i>
+                        <h3>Transparent</h3>
+                        <p>Processus de vote transparent avec des résultats vérifiables et une traçabilité complète.</p>
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <div class="team-member text-center">
-                        <img src="https://avatars.githubusercontent.com/u/65403571?v=4" alt="Harouna DIAW"
-                            class="img-fluid rounded-circle mb-3" style="width: 100px;">
-                        <h3>Harouna DIAW</h3>
-                        <p>Description à venir...</p>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt mb-3"></i>
+                        <h3>Accessible</h3>
+                        <p>Interface conviviale accessible depuis n'importe quel appareil connecté à Internet.</p>
                     </div>
                 </div>
             </div>
 
-        </section>
+            <!-- Section Notre Équipe -->
+            <div class="row mt-5">
+                <div class="col-12 text-center mb-5" data-aos="fade-up">
+                    <h2 class="section-title">Notre Équipe</h2>
+                    <p class="section-subtitle">Les créateurs derrière CampusElect</p>
+                </div>
+            </div>
 
-        <section id="contact" class="bg-white p-4 rounded shadow">
-            <h2>Contactez-nous</h2>
-            <p>Pour toute question concernant la plateforme, n'hésitez pas à nous contacter.</p>
-            <ul>
-                <li>Babacar MBathie: 761917181</li>
-                <li>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e2b362b233e222b0e2b232f2722602d2123">[email&#160;protected]</a></li>
-            </ul>
-        </section>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="team-card">
+                        <img src="{{ asset('images/baba.jpg') }}" alt="Babacar MBathie" class="team-img">
+                        <h3>Babacar MBathie</h3>
+                        <p class="team-role">Étudiant Entrepreneur</p>
+                        <p class="team-desc">Ingénieur informatique et en agriculture</p>
+                        <div class="team-contact">
+                            <i class="fas fa-phone me-2"></i>761917181
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="team-card">
+                        <img src="{{ asset('images/paco.jpg') }}" alt="Pape Doukoum TINE" class="team-img">
+                        <h3>Pape Doukoum TINE</h3>
+                        <p class="team-role">Étudiant/Informaticien</p>
+                        <p class="team-desc">Développeur, Entrepreneur</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="team-card">
+                        <img src="{{ asset('images/paco.jpg') }}" alt="Harouna DIAW" class="team-img">
+                        <h3>Harouna DIAW</h3>
+                        <p class="team-role">Développeur</p>
+                        <p class="team-desc">Spécialiste en sécurité des applications</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Contact -->
+            <div class="row mt-5">
+                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                    <div class="contact-section">
+                        <h2 class="section-title">Contactez-nous</h2>
+                        <p class="mb-4">Pour toute question concernant la plateforme, n'hésitez pas à nous contacter.</p>
+                        <div class="contact-info">
+                            <p><i class="fas fa-phone me-2"></i>Babacar MBathie: 761917181</p>
+                            <p><i class="fas fa-envelope me-2"></i>Email: <a href="mailto:contact@campuselect.com">contact@campuselect.com</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <footer class="bg-brown text-white text-center py-3">
-        <p>&copy; 2024 Notre Projet</p>
-    </footer>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    @include('components.footer')
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ asset('js/welcome.js') }}"></script>
 </body>
 
 </html>
