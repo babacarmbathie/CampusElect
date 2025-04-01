@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route pour la page "À Propos"
 Route::get('/a-propos', function () {
-    return view('about'); // Assurez-vous que le fichier about.blade.php existe dans resources/views/
+    return view('about');  
 })->name('about');
 
 Route::get('/', function () {

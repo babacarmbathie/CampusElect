@@ -96,7 +96,9 @@
                         <img src="{{ asset('images/paco.jpg') }}" alt="Pape Doukoum TINE" class="team-img">
                         <h3>Pape Doukoum TINE</h3>
                         <p class="team-role">Étudiant/Informaticien</p>
-                        <p class="team-desc">Développeur, Entrepreneur</p>
+                        <p class="team-desc">Développeur, Entrepreneur</p><div class="team-contact">
+                            <i class="fas fa-phone me-2"></i>777286959
+                        </div>
                     </div>
                 </div>
 
@@ -104,7 +106,7 @@
                     <div class="team-card">
                         <img src="{{ asset('images/paco.jpg') }}" alt="Harouna DIAW" class="team-img">
                         <h3>Harouna DIAW</h3>
-                        <p class="team-role">Développeur</p>
+                        <p class="team-role">Etudiant Développeur</p>
                         <p class="team-desc">Spécialiste en sécurité des applications</p>
                     </div>
                 </div>

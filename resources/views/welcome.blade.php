@@ -19,14 +19,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/nav-footer.css') }}">
 </head>
 
 <body id="index-body">
   <!-- Navigation Bar -->
   @include('components.nav')
 
-  <!-- Hero Section --> 
+  <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-overlay"></div>
     <div class="container hero-content">
@@ -48,48 +48,48 @@
 
   <!-- Organizations Section -->
   <section id="organizations" class="organizations">
-    <div class="container">
-      <!-- Première carte centrée -->
-      <div class="row justify-content-center mb-4">
+  <div class="container">
+    <!-- Première carte centrée -->
+    <div class="row justify-content-center mb-4">
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-          <button class="org-btn">
-            <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-            <h4>UFR SAT</h4>
-            <p>Sciences Appliquées et Technologies</p>
-          </button>
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
         </div>
-      </div>
+    </div>
 
-      <!-- Trois cartes alignées en bas -->
-      <div class="row justify-content-center">
+    <!-- Trois cartes alignées en bas -->
+    <div class="row justify-content-center">
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-          <button class="org-btn">
-            <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-            <h4>UFR SAT</h4>
-            <p>Sciences Appliquées et Technologies</p>
-          </button>
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
         </div>
 
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-          <button class="org-btn">
-            <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-            <h4>UFR SAT</h4>
-            <p>Sciences Appliquées et Technologies</p>
-          </button>
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
         </div>
 
         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
-          <button class="org-btn">
-            <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-            <h4>UFR SAT</h4>
-            <p>Sciences Appliquées et Technologies</p>
-          </button>
+            <button class="org-btn">
+                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
+                <h4>UFR SAT</h4>
+                <p>Sciences Appliquées et Technologies</p>
+            </button>
         </div>
-      </div>
     </div>
+</div>
   </section>
 
-  <!-- Footer -->
+   <!-- Footer -->
   @include('components.footer')
 
   <!-- Scripts -->

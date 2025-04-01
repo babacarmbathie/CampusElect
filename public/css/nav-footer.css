@@ -1,0 +1,189 @@
+/**
+ * CAMPUS ELECT - Styles de navigation et footer
+ * ==========================================
+ */
+
+/* Variables */
+:root {
+    --dark-brown: #3a2a1f;
+    --medium-brown: #5d4b36;
+    --light-brown: #8b7355;
+    --cream: #f5f0e6;
+    --white: #ffffff;
+    --nav-bg: rgba(58, 42, 31, 0.9);
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 40px;
+    --shadow-sm: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--nav-bg);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.navbar-brand-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark-brown);
+    margin-left: 0.5rem;
+}
+
+/* Logo styles */
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.logo-image {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.logo-fallback {
+    width: 40px;
+    height: 40px;
+    background-color: var(--dark-brown);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.logo-fallback i {
+    font-size: 1.5rem;
+    color: var(--cream);
+}
+
+.logo-image:error + .logo-fallback {
+    display: flex;
+}
+
+.nav-link {
+    color: var(--cream) !important;
+    font-weight: 500;
+    margin: 0 var(--spacing-sm);
+    padding: 8px var(--spacing-md) !important;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: rgba(139, 115, 85, 0.3);
+    color: var(--white) !important;
+}
+
+.navbar-toggler {
+    border-color: var(--cream);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(245, 240, 230, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Footer */
+.footer {
+    position: relative;
+    background: var(--cream);
+    color: var(--dark-brown);
+    padding-top: 80px;
+    margin-top: auto;
+}
+
+.custom-shape-divider-top-1713266907 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1713266907 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 80px;
+}
+
+.custom-shape-divider-top-1713266907 .shape-fill {
+    fill: var(--medium-brown);
+}
+
+.footer-body {
+    padding: var(--spacing-lg) 0;
+}
+
+.footer-left, .footer-middle, .footer-right {
+    padding: var(--spacing-md);
+}
+
+.footer p {
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.6;
+}
+
+.footer a {
+    color: var(--dark-brown);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer a:hover {
+    color: var(--light-brown);
+    text-decoration: underline;
+}
+
+.credits-footer {
+    font-weight: 500;
+    margin-bottom: var(--spacing-md) !important;
+}
+
+.connect-with-us-footer {
+    width: 30px;
+    margin-right: var(--spacing-sm);
+    transition: all 0.3s ease;
+}
+
+.connect-with-us-footer:hover {
+    transform: translateY(-3px);
+}
+
+.vertical-line {
+    display: none;
+}
+
+/* Media Queries */
+@media (max-width: 992px) {
+    .footer-left, .footer-middle, .footer-right {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .vertical-line {
+        display: block;
+        height: 1px;
+        background-color: rgba(58, 42, 31, 0.2);
+        margin: var(--spacing-lg) 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-brand-text {
+        font-size: 1.1rem;
+    }
+} 

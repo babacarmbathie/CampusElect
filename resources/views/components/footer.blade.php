@@ -72,7 +72,7 @@
                     </p>
                     <p class="contact-item">
                         <i class="bi bi-telephone-fill"></i>
-                        <a href="tel:+221338234567" class="campus-elect-phone">+221 33 823 45 67</a>
+                        <a href="tel:+221777286959" class="campus-elect-phone">+221 77 728 69 59</a>
                     </p>
                     <p class="contact-item">
                         <i class="bi bi-geo-alt-fill"></i>

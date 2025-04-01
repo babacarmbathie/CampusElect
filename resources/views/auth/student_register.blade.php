@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/nav-footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 </head>
 <body>
@@ -90,13 +91,20 @@
                         <div class="input-group">
                             <input type="password" id="password" name="password" required>
                             <label for="password">Mot de passe</label>
-                            <div class="help-text">Minimum 6 caractères</div>
+                            <i class="fas fa-check valid-icon"></i>
+                            <i class="fas fa-times invalid-icon"></i>
+                            <div class="help-text" id="passwordHelp">Minimum 6 caractères</div>
                         </div>
 
                         <div class="input-group">
                             <input type="password" id="password_confirmation" name="password_confirmation" required>
                             <label for="password_confirmation">Confirmer le mot de passe</label>
+                            <i class="fas fa-check valid-icon"></i>
+                            <i class="fas fa-times invalid-icon"></i>
+                            <div class="help-text" id="confirmHelp">Les mots de passe doivent correspondre</div>
                         </div>
+
+                        <div id="password-match-feedback" class="mb-3 text-center"></div>
 
                         <div class="input-group">
                             <input type="text" id="student_code" name="student_code" value="P" required>
@@ -121,6 +129,8 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/auth.js') }}"></script>
+    <script src="{{ asset('js/auth/auth-validation.js') }}"></script>
+    <script src="{{ asset('js/auth/auth-ui.js') }}"></script>
+    <script src="{{ asset('js/auth/auth.js') }}"></script>
 </body>
 </html>
