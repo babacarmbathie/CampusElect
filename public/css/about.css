@@ -1,6 +1,37 @@
 /* Import de la police Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
+/* Variables spécifiques à la page About */
+:root {
+    --about-gradient: linear-gradient(135deg, var(--blanc), var(--beige));
+    --card-shadow: 0 4px 8px rgba(var(--marron-fonce-rgb), 0.1);
+    --card-shadow-hover: 0 10px 20px rgba(var(--marron-fonce-rgb), 0.2);
+    --accent-color: #A06235;
+    --accent-color-2: #D4A373;
+    --accent-color-3: #E3B7A0;
+    --accent-gradient: linear-gradient(135deg, var(--marron-fonce), var(--accent-color));
+    --accent-gradient-2: linear-gradient(45deg, var(--accent-color-2), var(--accent-color-3));
+    --shine-gradient: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    --text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    --rainbow-gradient: linear-gradient(45deg, 
+        #FAEDCD,
+        #E9EDC9,
+        #CCD5AE,
+        #D4A373,
+        #FEFAE0
+    );
+    --card-radius: 20px;
+    --card-padding: 2rem;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-border: 1px solid rgba(255, 255, 255, 0.2);
+    --card-shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.15);
+    --card-shadow-hover: 0 8px 32px rgba(31, 38, 135, 0.25);
+    --card-transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
 /* Styles spécifiques à la page About */
 .bg-brown {
     background-color: var(--marron-fonce) !important;
@@ -19,55 +50,429 @@
     padding-top: 120px;
     padding-bottom: 80px;
     background-color: var(--blanc);
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='%23d7ccc8' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+    position: relative;
+    overflow: hidden;
+}
+
+.about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(var(--marron-fonce-rgb), 0.05) 0%, transparent 75%);
+    pointer-events: none;
+}
+
+/* Titres de section */
+.section-title {
+    color: var(--marron-fonce);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 3px;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-gradient);
+    border-radius: 2px;
+}
+
+h1.section-title {
+    text-shadow: var(--text-shadow);
+    position: relative;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+h1.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent-gradient);
+    transform: translateX(-100%);
+    animation: titleLine 1.5s ease-in-out forwards;
+}
+
+@keyframes titleLine {
+    to {
+        transform: translateX(0);
+    }
+}
+
+.section-subtitle {
+    color: var(--marron-moyen);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    margin-top: 1.5rem;
 }
 
 /* Styles des sections */
 .section {
     margin-bottom: 30px;
-    background: linear-gradient(to bottom, var(--blanc), var(--beige));
+    background: var(--about-gradient);
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(var(--marron-fonce-rgb), 0.1);
-    transition: box-shadow 0.3s;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--rainbow-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease;
+    animation: gradientFlow 8s ease infinite;
+    background-size: 300% 300%;
 }
 
 .section:hover {
-    box-shadow: 0 6px 12px rgba(var(--marron-fonce-rgb), 0.15);
-}
-
-/* Styles de l'équipe */
-.team-member {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid var(--marron-clair);
-    border-radius: 8px;
-    background: linear-gradient(to bottom, var(--beige), var(--blanc));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: transform 0.2s;
-}
-
-.team-member:hover {
+    box-shadow: var(--card-shadow-hover);
     transform: translateY(-5px);
 }
 
-.team-member img {
-    width: 100px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(var(--marron-fonce-rgb), 0.15);
+.section:hover::before {
+    transform: scaleX(1);
 }
 
-.team-member h3 {
-    color: var(--marron-fonce);
-    margin-bottom: 5px;
+/* Styles des cartes de fonctionnalités */
+.feature-card {
+    background: var(--blanc);
+    border: 2px solid var(--marron-clair);
+    border-radius: 15px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    z-index: 1;
 }
 
-.team-member p {
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(var(--marron-fonce-rgb), 0.05), rgba(var(--marron-moyen-rgb), 0.1));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--marron-moyen);
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+.feature-card i {
+    font-size: 3rem;
     color: var(--marron-moyen);
-    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    transition: all 0.5s ease;
+    display: inline-block;
+}
+
+.feature-card:hover i {
+    transform: scale(1.2) rotate(5deg);
+    color: var(--marron-fonce);
+}
+
+.feature-card h3 {
+    color: var(--marron-fonce);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-bottom: 0.8rem;
+}
+
+.feature-card h3::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 2px;
+    background: var(--marron-clair);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.feature-card:hover h3::after {
+    width: 80px;
+    background: var(--marron-moyen);
+}
+
+.feature-card p {
+    color: var(--marron-moyen);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+/* Styles des cartes d'équipe */
+.team-card {
+    position: relative;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: var(--card-radius);
+    border: var(--glass-border);
+    overflow: hidden;
+    box-shadow: var(--card-shadow-soft);
+    transition: var(--card-transition);
+}
+
+.team-img-container {
+    position: relative;
+    padding-top: 100%;
+    overflow: hidden;
+}
+
+.team-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.team-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(var(--marron-fonce-rgb), 0.8) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.team-card:hover .team-overlay {
+    opacity: 1;
+}
+
+.team-card:hover .team-img {
+    transform: scale(1.1);
+}
+
+.team-info {
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    background: var(--glass-bg);
+}
+
+.team-info h3 {
+    color: var(--marron-fonce);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.team-role {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.team-desc {
+    color: var(--marron-moyen);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.team-contact {
+    background: var(--glass-bg);
+    padding: 1rem;
+    border-top: var(--glass-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.team-contact i {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.team-contact:hover i {
+    transform: scale(1.2);
+}
+
+/* Animation spéciale pour les cartes */
+@keyframes cardFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.feature-card:hover,
+.team-card:hover {
+    animation: cardFloat 3s ease-in-out infinite;
+}
+
+/* Section de contact */
+.contact-section {
+    padding: 50px 40px;
+    background-color: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(250, 237, 205, 0.9));
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(var(--marron-fonce-rgb), 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(var(--marron-fonce-rgb), 0.03), rgba(var(--marron-moyen-rgb), 0.06));
+    z-index: 0;
+}
+
+.contact-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--accent-gradient);
+}
+
+.contact-section:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-5px);
+}
+
+.contact-section .section-title,
+.contact-section p {
+    position: relative;
+    z-index: 1;
+}
+
+.contact-info {
+    margin-top: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-info p {
+    position: relative;
+    padding-left: 45px;
+    color: var(--marron-moyen);
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.contact-info p:hover {
+    transform: translateX(8px);
+}
+
+.contact-info p i {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    color: white;
+    -webkit-text-fill-color: white;
+}
+
+.contact-info p:hover i {
+    animation: bounce 0.5s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(-50%); }
+    50% { transform: translateY(-65%); }
+}
+
+.contact-info a {
+    color: var(--marron-fonce);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+}
+
+.contact-info a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-gradient);
+    transition: width 0.3s ease;
+}
+
+.contact-info a:hover {
+    color: var(--accent-color);
+}
+
+.contact-info a:hover::after {
+    width: 100%;
 }
 
 /* Media Queries */
@@ -77,11 +482,244 @@
         padding-bottom: 60px;
     }
 
-    .team-member {
-        padding: 10px;
+    .feature-card,
+    .team-card {
+        margin-bottom: 2rem;
+    }
+    
+    .team-img-container {
+        padding-top: 75%;
+    }
+    
+    .team-info {
+        padding: 1rem;
+    }
+    
+    .team-contact {
+        padding: 0.75rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .feature-card {
+        padding: 1.5rem;
+    }
+    
+    .feature-card i {
+        font-size: 2.5rem;
+    }
+    
+    .team-img-container {
+        padding-top: 66.67%;
+    }
+    
+    .contact-section {
+        padding: 30px 20px;
+    }
+}
+
+/* Animation de brillance pour les cartes */
+@keyframes shine {
+    from {
+        background-position: -200% center;
+    }
+    to {
+        background-position: 200% center;
+    }
+}
+
+.team-card::before,
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 200%;
+    height: 100%;
+    background-image: var(--shine-gradient);
+    background-size: 200% 100%;
+    animation: shine 8s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.team-card:hover::before,
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+/* Améliorations de la section contact */
+.contact-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(var(--marron-fonce-rgb), 0.1);
+}
+
+.contact-info p {
+    position: relative;
+    padding-left: 45px;
+}
+
+.contact-info p i {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    color: white;
+    -webkit-text-fill-color: white;
+}
+
+.contact-info p:hover i {
+    animation: bounce 0.5s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(-50%); }
+    50% { transform: translateY(-65%); }
+}
+
+/* Styles pour la page de confidentialité */
+.privacy-section {
+    padding: 120px 0 80px;
+    background-color: var(--blanc);
+    position: relative;
+}
+
+.privacy-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(var(--marron-fonce-rgb), 0.05) 0%, transparent 75%);
+    pointer-events: none;
+}
+
+.privacy-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(var(--marron-fonce-rgb), 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.privacy-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.privacy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.privacy-card:hover::before {
+    opacity: 1;
+}
+
+.privacy-card h2 {
+    color: var(--marron-fonce);
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.privacy-card h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--accent-gradient);
+    transition: width 0.3s ease;
+}
+
+.privacy-card:hover h2::after {
+    width: 100px;
+}
+
+.privacy-card p {
+    color: var(--marron-moyen);
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+}
+
+.privacy-card ul {
+    list-style: none;
+    padding-left: 1.5rem;
+}
+
+.privacy-card ul li {
+    color: var(--marron-moyen);
+    margin-bottom: 0.8rem;
+    position: relative;
+}
+
+.privacy-card ul li::before {
+    content: '•';
+    color: var(--accent-color);
+    position: absolute;
+    left: -1.5rem;
+    font-size: 1.2rem;
+}
+
+.privacy-card .contact-info {
+    margin-top: 1.5rem;
+}
+
+.privacy-card .contact-info p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.privacy-card .contact-info i {
+    color: var(--accent-color);
+    margin-right: 1rem;
+    font-size: 1.2rem;
+    width: 24px;
+}
+
+@media (max-width: 768px) {
+    .privacy-section {
+        padding: 100px 0 60px;
     }
 
-    .team-member img {
-        width: 80px;
+    .privacy-card {
+        padding: 1.5rem;
+    }
+
+    .privacy-card h2 {
+        font-size: 1.3rem;
     }
 } 

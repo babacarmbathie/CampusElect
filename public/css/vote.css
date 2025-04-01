@@ -4,7 +4,6 @@
   --light-brown: #8b7355;
   --cream: #f5f0e6;
   --white: #ffffff;
-  --nav-bg: rgba(58, 42, 31, 0.9);
 }
 
 body {
@@ -16,39 +15,159 @@ body {
   flex-direction: column;
 }
 
-/* Navigation */
-.navbar {
-  background-color: var(--nav-bg);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand {
-  font-weight: 600;
-  color: var(--cream) !important;
-  letter-spacing: 1px;
-}
-
-.nav-link {
-  color: var(--cream) !important;
-  font-weight: 500;
-  margin: 0 10px;
-  padding: 8px 15px !important;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-
-.nav-link:hover, .nav-link.active {
-  background-color: rgba(139, 115, 85, 0.3);
-  color: var(--white) !important;
-}
-
 /* Contenu principal */
 .page-header {
   background: linear-gradient(to right, var(--medium-brown), var(--dark-brown));
   color: white;
   padding: 3rem 0;
   margin-bottom: 2rem;
+}
+
+/* Badge d'état d'élection */
+.election-status {
+  margin: 1rem 0 2rem;
+}
+
+.status-badge {
+  display: inline-block;
+  background-color: #2ecc71;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: pulsate 2s infinite;
+}
+
+.status-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes pulsate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Section d'information sur l'élection */
+.election-info {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: linear-gradient(135deg, var(--cream), #f8f8f8);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.election-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--dark-brown), var(--medium-brown), var(--light-brown));
+}
+
+.info-item {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 12px 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+}
+
+.info-item i {
+  font-size: 1.6rem;
+  margin-right: 12px;
+  color: var(--dark-brown);
+  background: linear-gradient(135deg, var(--dark-brown), var(--light-brown));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 1px 1px rgba(255,255,255,0.1);
+}
+
+.info-item span {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--medium-brown);
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .election-info {
+    flex-direction: column;
+    padding: 15px 12px;
+    gap: 10px;
+  }
+  
+  .info-item {
+    width: 100%;
+    min-width: auto;
+    padding: 10px;
+  }
+}
+
+/* Sections et titres */
+.section-title {
+  color: var(--dark-brown);
+  font-weight: 600;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.section-title i {
+  color: var(--medium-brown);
+  font-size: 1.8rem;
+  margin-right: 10px;
+  background: linear-gradient(135deg, var(--dark-brown), var(--light-brown));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-subtitle {
+  color: var(--medium-brown);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.85;
 }
 
 /* Cartes candidats */
@@ -191,35 +310,11 @@ body {
   cursor: not-allowed;
 }
 
-/* Footer */
-.footer {
-  background: linear-gradient(to right, var(--dark-brown), var(--medium-brown));
-  color: var(--cream);
-  padding: 40px 0 20px;
-  margin-top: auto;
-}
-
-.footer a {
-  color: var(--cream);
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.footer a:hover {
-    color: white;
-    text-decoration: underline;
-}
-
-.footer-logo {
-  width: 120px;
-  margin-bottom: 15px;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   .candidate-img-container {
     height: 200px;
-}
+  }
 
   .modal-body img {
     max-height: 200px;

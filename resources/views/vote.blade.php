@@ -25,13 +25,18 @@
 
   <!-- Contenu principal -->
   <main class="container my-5">
+
+
+      <!-- Information sur l'élection -->
       <div class="row">
           <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
             <h1 class="mb-2">Élections UFR SAT</h1>
+            <div class="election-status">
+              <span class="status-badge">Élection ouverte</span>
+            </div>
           </div>
       </div>
 
-      <!-- Information sur l'élection -->
       <div class="row mt-4">
         <div class="col-12">
           <div class="election-info" data-aos="fade-up">
@@ -51,51 +56,55 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-12">
-          <div class="row mt-5">
-            <div class="col-12 text-center mb-4">
-              <h2 class="section-title">Candidats</h2>
-              <p class="section-subtitle">Sélectionnez votre candidat pour voter</p>
+    <div class="row">
+      <div class="col-12">
+        <div class="row mt-5">
+          <div class="col-12 text-center mb-4">
+              <h2 class="section-title"><i class="fas fa-user-tie me-2"></i>Candidats</h2>
+              @if($vote)
+                <p class="section-subtitle">Vous avez déjà voté pour un candidat</p>
+              @else
+            <p class="section-subtitle">Sélectionnez votre candidat pour voter</p>
+              @endif
             </div>
-          </div>
-          
-          <div class="row" id="candidates-list">
-            @foreach($candidates as $candidate)
-              @php
-                $name = json_encode($candidate->name);
-                $program = json_encode(str_replace(["\r", "\n"], ' ', $candidate->program));
-                $photo = json_encode($candidate->photo_path);
-              @endphp
-              <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 candidate-card" onclick="openCandidateModal({{ $name }}, {{ $program }}, {{ $photo }}, {{ $candidate->id }})">
-                  <div class="candidate-img-container">
-                    <img src="{{ asset('storage/' . $candidate->photo_path) }}" class="candidate-img" alt="{{ $candidate->name }}">
-                  </div>
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      {{ $candidate->name }}
-                      @if($vote && $vote->candidate_id === $candidate->id)
-                        <i class="fas fa-check-circle text-success ms-2"></i>
-                      @endif
-                    </h5>
-                    <p class="card-text">{{ Str::limit($candidate->program, 80) }}</p>
-                  </div>
-                  @if($vote)
-                    <div class="progress-container">
-                      <div class="progress">
-                        <div id="progress-{{ $candidate->id }}" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                          <span>0%</span>
-                        </div>
+        </div>
+        
+        <div class="row" id="candidates-list">
+          @foreach($candidates as $candidate)
+            @php
+              $name = json_encode($candidate->name);
+              $program = json_encode(str_replace(["\r", "\n"], ' ', $candidate->program));
+              $photo = json_encode($candidate->photo_path);
+            @endphp
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100 candidate-card" onclick="openCandidateModal({{ $name }}, {{ $program }}, {{ $photo }}, {{ $candidate->id }})">
+                <div class="candidate-img-container">
+                  <img src="{{ asset('storage/' . $candidate->photo_path) }}" class="candidate-img" alt="{{ $candidate->name }}">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">
+                    {{ $candidate->name }}
+                    @if($vote && $vote->candidate_id === $candidate->id)
+                      <i class="fas fa-check-circle text-success ms-2"></i>
+                    @endif
+                  </h5>
+                  <p class="card-text">{{ Str::limit($candidate->program, 80) }}</p>
+                </div>
+                @if($vote)
+                  <div class="progress-container">
+                    <div class="progress">
+                      <div id="progress-{{ $candidate->id }}" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <span>0%</span>
                       </div>
                     </div>
-                  @endif
-                </div>
+                  </div>
+                @endif
               </div>
-            @endforeach
-          </div>
+            </div>
+          @endforeach
         </div>
       </div>
+    </div>
   </main>
 
   <!-- Modal Candidat -->

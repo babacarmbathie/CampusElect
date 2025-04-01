@@ -71,3 +71,16 @@ if (app()->environment('local')) {
         ]);
     });
 }
+
+// Routes des pages statiques
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/histoire', function () {
+    return view('about', ['section' => 'histoire']);
+})->name('histoire');
+
+Route::get('/confidentialite', function () {
+    return view('confidentialite');
+})->name('confidentialite');

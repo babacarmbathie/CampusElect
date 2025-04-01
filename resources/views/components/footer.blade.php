@@ -83,10 +83,10 @@
                     <a href="{{ route('about') }}" class="footer-link">
                         <i class="bi bi-info-circle"></i>À propos
                     </a>
-                    <a href="{{ route('about') }}" class="footer-link">
+                    <!-- <a href="{{ route('histoire') }}" class="footer-link"> -->
                         <i class="bi bi-clock-history"></i>Notre Histoire
                     </a>
-                    <a href="{{ route('about') }}" class="footer-link">
+                    <a href="{{ route('confidentialite') }}" class="footer-link">
                         <i class="bi bi-shield-check"></i>Confidentialité
                     </a>
                 </div>
