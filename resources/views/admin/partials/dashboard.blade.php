@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Tableau de Bord</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -136,19 +137,19 @@
             <div class="col-md-4">
                 <div class="card p-3 bg-primary text-white">
                     <h5><i class="fas fa-users"></i> Étudiants</h5>
-                    <h3>150</h3>
+                    <h3></h3>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card p-3 bg-success text-white">
                     <h5><i class="fas fa-user-tie"></i> Candidats</h5>
-                    <h3>10</h3>
+                    <h3></h3>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card p-3 bg-danger text-white">
                     <h5><i class="fas fa-vote-yea"></i> Votes</h5>
-                    <h3>200</h3>
+                    <h3></h3>
                 </div>
             </div>
         </div>
@@ -158,13 +159,13 @@
             <div class="col-md-6">
                 <div class="card p-3">
                     <h5><i class="fas fa-chart-pie"></i> Répartition des Étudiants</h5>
-                    <canvas id="studentChart"></canvas>
+                    <canvas id="studentChart" width="400" height="200"></canvas>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card p-3">
                     <h5><i class="fas fa-chart-bar"></i> Activité des Candidats</h5>
-                    <canvas id="candidateChart"></canvas>
+                    <canvas id="candidateChart" width="400" height="200"></canvas>
                 </div>
             </div>
         </div>
@@ -182,37 +183,102 @@
         </div>
     </div>
 
-    <script>
-        // Graphique des étudiants (camembert)
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    $(document).ready(function () {
+        function loadStats() {
+            $.ajax({
+                url:'{{ route("dashboard.stats") }}',
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+                success: function (data) {
+                    // Mettre à jour les cartes de statistiques
+                    $('.card.bg-primary h3').text(data.etudiants);
+                    $('.card.bg-success h3').text(data.candidats);
+                    $('.card.bg-danger h3').text(data.votes);
+
+                    // Mettre à jour le graphique des étudiants
+                    updateStudentChart(data.etudiants_actifs, data.etudiants_inactifs);
+
+                    // Mettre à jour le graphique des votes des candidats
+                    updateCandidateChart(data.votes_par_candidat);
+                },
+                error: function () {
+                    console.log("Erreur lors du chargement des statistiques.");
+                }
+            });
+        }
+
+        function updateStudentChart(actifs, inactifs) {
+        console.log("Mise à jour du graphique des étudiants:", actifs, inactifs);
+        
         var ctx1 = document.getElementById('studentChart').getContext('2d');
-        var studentChart = new Chart(ctx1, {
+        
+        // Vérifier si le graphique existe avant d'essayer de le détruire
+        if (window.studentChart instanceof Chart) {
+            window.studentChart.destroy();
+        }
+        
+        // Créer un nouveau graphique seulement si nous avons des données valides
+        // Convertir en nombre et utiliser 0 par défaut si la valeur est undefined ou NaN
+        actifs = Number(actifs) || 0;
+        inactifs = Number(inactifs) || 0;
+        
+        window.studentChart = new Chart(ctx1, {
             type: 'pie',
             data: {
                 labels: ['Étudiants Actifs', 'Étudiants Inactifs'],
                 datasets: [{
-                    data: [130, 20],
+                    data: [actifs, inactifs],
                     backgroundColor: ['#28a745', '#dc3545'],
-                    borderColor: ['#fff', '#fff'],
-                    borderWidth: 1
+                    
                 }]
-            }
+            },
+            options: {
+    responsive: true,
+   
+    plugins: {
+        legend: {
+            position: 'top'
+        }
+    }
+}
         });
+    }
 
-        // Graphique des candidats (barres)
-        var ctx2 = document.getElementById('candidateChart').getContext('2d');
-        var candidateChart = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
-                datasets: [{
-                    label: 'Candidats',
-                    data: [5, 8, 7, 9, 10, 6],
-                    backgroundColor: '#0275d8',
-                    borderColor: '#0056b3',
-                    borderWidth: 1
-                }]
+        function updateCandidateChart(votesParCandidat) {
+            var ctx2 = document.getElementById('candidateChart').getContext('2d');
+            if (window.candidateChart) {
+                window.candidateChart.destroy();
             }
-        });
-    </script>
+
+            var labels = votesParCandidat.map(c => c.nom);
+            var votes = votesParCandidat.map(c => c.votes_count);
+
+            window.candidateChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Votes par Candidat',
+                        data: votes,
+                        backgroundColor: '#0275d8',
+                        borderColor: '#0056b3',
+                        borderWidth: 1
+                    }]
+                }
+            });
+        }
+
+        // Charger les stats au chargement et rafraîchir toutes les 10 secondes
+        loadStats();
+        setInterval(loadStats, 10000);
+    });
+</script>
+
 </body>
 </html>
