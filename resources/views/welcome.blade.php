@@ -52,11 +52,11 @@
     <!-- Première carte centrée -->
     <div class="row justify-content-center mb-4">
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-            <button class="org-btn">
+            <a href="{{ route('student.register', ['ufr' => $ufrs['SAT']['code']]) }}" class="org-btn">
                 <img src="{{ asset('images/' . $ufrs['SAT']['logo']) }}" alt="{{ $ufrs['SAT']['code'] }} Logo">
                 <h4>UFR {{ $ufrs['SAT']['code'] }}</h4>
                 <p>{{ $ufrs['SAT']['nom'] }}</p>
-            </button>
+            </a>
         </div>
     </div>
 
@@ -74,11 +74,11 @@
             @endif
             
             <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="{{ 100 + ($i * 100) }}">
-                <button class="org-btn">
+                <a href="{{ route('student.register', ['ufr' => $ufrs[$ufrKeys[$i]]['code']]) }}" class="org-btn">
                     <img src="{{ asset('images/' . $ufrs[$ufrKeys[$i]]['logo']) }}" alt="{{ $ufrs[$ufrKeys[$i]]['code'] }} Logo">
                     <h4>UFR {{ $ufrs[$ufrKeys[$i]]['code'] }}</h4>
                     <p>{{ $ufrs[$ufrKeys[$i]]['nom'] }}</p>
-                </button>
+                </a>
             </div>
         @endfor
     </div>

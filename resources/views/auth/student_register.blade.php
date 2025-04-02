@@ -75,6 +75,20 @@
 
                     <form action="{{ route('student.register') }}" method="POST">
                         @csrf
+                        
+                        <div class="input-group">
+                            <select id="ufr" name="ufr" required>
+                                <option value="">Sélectionnez votre UFR</option>
+                                @foreach($ufrs as $ufr)
+                                    <option value="{{ $ufr['code'] }}" {{ request('ufr') == $ufr['code'] ? 'selected' : '' }}>
+                                        {{ $ufr['nom'] }} ({{ $ufr['code'] }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <label for="ufr">UFR</label>
+                            <div class="help-text" id="ufrHelp">Vous avez choisi l'UFR : <span id="selected-ufr-name"></span></div>
+                        </div>
+
                         <div class="input-group">
                             <input type="text" id="name" name="name" value="{{ old('name') }}" required>
                             <label for="name">Nom complet</label>
@@ -114,19 +128,6 @@
                             <div class="help-text" id="codeHelp">Commence par P (Ex. P12345)</div>
                         </div>
 
-                        <div class="input-group">
-                            <select id="ufr" name="ufr" required>
-                                <option value="">Sélectionnez votre UFR</option>
-                                @foreach($ufrs as $code => $ufr)
-                                    <option value="{{ $code }}">{{ $ufr['nom'] }} ({{ $code }})</option>
-                                @endforeach
-                            </select>
-                            <label for="ufr">UFR</label>
-                            <i class="fas fa-check valid-icon"></i>
-                            <i class="fas fa-times invalid-icon"></i>
-                            <div class="help-text" id="ufrHelp">Sélectionnez votre Unité de Formation et de Recherche</div>
-                        </div>
-
                         <button type="submit" class="submit-btn">S'inscrire</button>
                         <p class="login-link">
                             Déjà inscrit ? 
@@ -145,5 +146,32 @@
     <script src="{{ asset('js/auth/auth-validation.js') }}"></script>
     <script src="{{ asset('js/auth/auth-ui.js') }}"></script>
     <script src="{{ asset('js/auth/auth.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ufrSelect = document.getElementById('ufr');
+            const selectedUfrName = document.getElementById('selected-ufr-name');
+            const ufrHelp = document.getElementById('ufrHelp');
+            
+            // Fonction pour mettre à jour le message d'aide
+            function updateUfrHelp() {
+                const selectedOption = ufrSelect.options[ufrSelect.selectedIndex];
+                if (ufrSelect.value) {
+                    selectedUfrName.textContent = selectedOption.text;
+                    ufrHelp.style.opacity = '1';
+                    ufrHelp.style.transform = 'translateY(0)';
+                } else {
+                    selectedUfrName.textContent = '';
+                    ufrHelp.style.opacity = '0';
+                    ufrHelp.style.transform = 'translateY(10px)';
+                }
+            }
+            
+            // Mettre à jour au chargement de la page
+            updateUfrHelp();
+            
+            // Mettre à jour lors du changement de sélection
+            ufrSelect.addEventListener('change', updateUfrHelp);
+        });
+    </script>
 </body>
 </html>
