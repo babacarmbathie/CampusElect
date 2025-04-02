@@ -84,6 +84,36 @@ class VoteController extends Controller
 
         return response()->json($progress);
     }
+   //AJAX
+    public function getVotes()
+{
+    // Récupérer l'élection en cours
+    $currentElection = Election::where('status', 1)->first();
+    if (!$currentElection) {
+        return response()->json([]);
+    }
+
+    // Calculer le total des votes
+    $totalVotes = Vote::where('election_id', $currentElection->id)->count();
+
+    // Récupérer les candidats et leurs votes
+    $candidates = Candidate::where('election_id', $currentElection->id)->get();
+    $voteData = [];
+
+    foreach ($candidates as $candidate) {
+        $candidateVotes = Vote::where('candidate_id', $candidate->id)->count();
+        $voteData[] = [
+            'name' => $candidate->name,
+            'votes' => $candidateVotes
+        ];
+    }
+
+    return response()->json([
+        'totalVotes' => $totalVotes,
+        'candidates' => $voteData
+    ]);
+}
+
 
 }
 

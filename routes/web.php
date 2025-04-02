@@ -5,6 +5,8 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\DashboardController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -36,13 +38,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vote', [CandidateController::class, 'index'])->name('vote.index');
     Route::post('/vote', [VoteController::class, 'store'])->name('vote.store');
     Route::get('/vote/progress', [VoteController::class, 'progress'])->name('vote.progress');
-
+    Route::get('/votes/data', [VoteController::class, 'getVotes'])->name('votes.getVotes');
 });
 // Routes admin
 Route::prefix('admin')->group(function () {
-    // Dashboard admin
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+
+     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     
+    
+    Route::get('/dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
+
     // Gestion des étudiants
     Route::prefix('etudiants')->group(function () {
         Route::get('/', [AdminController::class, 'etudiants'])->name('admin.etudiants');

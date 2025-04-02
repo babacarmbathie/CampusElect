@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Gestion des Votes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
@@ -76,7 +77,7 @@
                 <div class="card bg-info text-white">
                     <div class="card-body">
                         <h5><i class="fas fa-vote-yea"></i> Total des Votants</h5>
-                        <h3 id="totalVotants">200</h3>
+                        <h3 id="totalVotants">0</h3>
                     </div>
                 </div>
             </div>
@@ -105,17 +106,19 @@
 
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Initialiser le graphique avec des données vides
         const ctx = document.getElementById('votesChart').getContext('2d');
-        const votesChart = new Chart(ctx, {
+        let votesChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['Jean Dupont', 'Marie Martin'],
+                labels: [],
                 datasets: [{
                     label: 'Nombre de Votes',
-                    data: [120, 80],
-                    backgroundColor: ['#FF6384', '#36A2EB'],
+                    data: [],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
                 }]
             },
             options: {
@@ -132,28 +135,75 @@
             }
         });
 
-        // Mise à jour en temps réel (simulée)
-        setInterval(() => {
-            const totalVotants = document.getElementById('totalVotants');
-            const resultatsVotes = document.getElementById('resultatsVotes');
-            const votes = [
-                { name: 'Jean Dupont', votes: 120 + Math.floor(Math.random() * 10) },
-                { name: 'Marie Martin', votes: 80 + Math.floor(Math.random() * 10) },
-            ];
-            const total = votes.reduce((acc, curr) => acc + curr.votes, 0);
+        // Configuration pour les requêtes AJAX
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-            totalVotants.textContent = total;
-            resultatsVotes.innerHTML = votes.map(candidat => `
-                <div class="mb-3">
-                    <h6>${candidat.name}</h6>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: ${(candidat.votes / total) * 100}%;">
-                            ${((candidat.votes / total) * 100).toFixed(2)}%
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }, 3000);
+        // Fonction pour mettre à jour les données
+        function updateVotesData() {
+            $.ajax({
+                url: '{{ route("votes.getVotes") }}',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Mise à jour du total des votants
+                    $('#totalVotants').text(data.totalVotes);
+
+                    // Extraction des données pour le graphique
+                    const candidateNames = [];
+                    const candidateVotes = [];
+                    let resultatsHTML = '';
+
+                    data.candidates.forEach(function(candidate) {
+                        candidateNames.push(candidate.name);
+                        candidateVotes.push(candidate.votes);
+
+                        // Calcul du pourcentage
+                        const percentage = data.totalVotes > 0 
+                            ? ((candidate.votes / data.totalVotes) * 100).toFixed(2) 
+                            : 0;
+
+                        // HTML pour les barres de progression
+                        resultatsHTML += `
+                            <div class="mb-3">
+                                <h6>${candidate.name}</h6>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: ${percentage}%;" 
+                                         aria-valuenow="${percentage}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        ${percentage}%
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // Mise à jour du graphique
+                    votesChart.data.labels = candidateNames;
+                    votesChart.data.datasets[0].data = candidateVotes;
+                    votesChart.update();
+
+                    // Mise à jour des résultats
+                    $('#resultatsVotes').html(resultatsHTML);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erreur lors de la récupération des votes:', error);
+                }
+            });
+        }
+
+        // Appeler la fonction au chargement de la page
+        $(document).ready(function() {
+            updateVotesData();
+            
+            // Mettre à jour les données toutes les 3 secondes
+            setInterval(updateVotesData, 3000);
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
