@@ -73,6 +73,24 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label fw-bold" style="color: var(--primary-color);">
+                                <i class="fas fa-university me-2"></i>UFR <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control form-control-lg border-0 shadow-sm @error('ufr') is-invalid @enderror" 
+                                    name="ufr" required>
+                                <option value="">Sélectionnez une UFR</option>
+                                @foreach($ufrs as $code => $ufr)
+                                    <option value="{{ $code }}">{{ $ufr['nom'] }} ({{ $code }})</option>
+                                @endforeach
+                            </select>
+                            @error('ufr')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" style="color: var(--primary-color);">
                                 <i class="fas fa-lock me-2"></i>Mot de passe <span class="text-danger">*</span>
                             </label>
                             <input type="password" class="form-control form-control-lg border-0 shadow-sm @error('password') is-invalid @enderror" 
