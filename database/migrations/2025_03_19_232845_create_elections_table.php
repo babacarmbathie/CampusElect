@@ -10,10 +10,12 @@ class CreateElectionsTable extends Migration
     {
         Schema::create('elections', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             // Ici, le statut est un int, à mapper dans le modèle (ex: 0=CREATED, 1=OPEN, etc.) ou pas
             $table->integer('status');
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
+            $table->enum('ufr', ['SAT', 'SJP', '2S', 'S2ATA', 'SEFS', 'LSH', 'SEG']);
             $table->timestamps();
         });
     }

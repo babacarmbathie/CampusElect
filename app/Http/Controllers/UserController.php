@@ -45,7 +45,8 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students,student_code,'.$user->student->id
+            'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students,student_code,'.$user->student->id,
+            'ufr' => 'required|in:SAT,SJP,2S,S2ATA,SEFS,LSH,SEG',
         ]);
         
         $user->update([
@@ -54,7 +55,8 @@ class UserController extends Controller
         ]);
         
         $user->student->update([
-            'student_code' => strtoupper(str_replace(' ', '', $request->student_code))
+            'student_code' => strtoupper(str_replace(' ', '', $request->student_code)),
+            'ufr' => $request->ufr,
         ]);
         
         return redirect()->route('etudiants.index')->with('success', 'Étudiant mis à jour avec succès');

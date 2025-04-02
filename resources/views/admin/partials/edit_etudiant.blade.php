@@ -41,6 +41,18 @@
                                 <small class="text-muted">Format: P123456</small>
                             </div>
                             
+                            <div class="mb-3">
+                                <label class="form-label">UFR</label>
+                                <select class="form-control" name="ufr" required>
+                                    <option value="">Sélectionnez une UFR</option>
+                                    @foreach($ufrs as $code => $ufr)
+                                        <option value="{{ $code }}" {{ $user->student->ufr == $code ? 'selected' : '' }}>
+                                            {{ $ufr['nom'] }} ({{ $code }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
                             <button type="submit" class="btn btn-primary">Enregistrer</button>
                             <a href="{{ route('etudiants.index') }}" class="btn btn-secondary">Annuler</a>
                         </form>

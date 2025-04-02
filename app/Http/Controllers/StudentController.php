@@ -31,6 +31,7 @@ class StudentController extends Controller
             'email' => 'required|string|email|regex:/^[^\s@]+@ugb\.edu\.sn$/|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students',
+            'ufr' => 'required|in:SAT,SJP,2S,S2ATA,SEFS,LSH,SEG',
         ]);
 
         // Création de l'utilisateur
@@ -44,6 +45,7 @@ class StudentController extends Controller
         Student::create([
             'user_id' => $user->id,
             'student_code' => $validated['student_code'],
+            'ufr' => $validated['ufr'],
         ]);
 
         return redirect()->route('student.login.form')->with('success', 'Inscription réussie, veuillez vous connecter.');

@@ -52,39 +52,35 @@
     <!-- Première carte centrée -->
     <div class="row justify-content-center mb-4">
         <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-            <button class="org-btn">
-                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-                <h4>UFR SAT</h4>
-                <p>Sciences Appliquées et Technologies</p>
-            </button>
+            <a href="{{ route('student.register', ['ufr' => $ufrs['SAT']['code']]) }}" class="org-btn">
+                <img src="{{ asset('images/' . $ufrs['SAT']['logo']) }}" alt="{{ $ufrs['SAT']['code'] }} Logo">
+                <h4>UFR {{ $ufrs['SAT']['code'] }}</h4>
+                <p>{{ $ufrs['SAT']['nom'] }}</p>
+            </a>
         </div>
     </div>
 
-    <!-- Trois cartes alignées en bas -->
+    <!-- Cartes des UFRs -->
     <div class="row justify-content-center">
-        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-            <button class="org-btn">
-                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-                <h4>UFR SAT</h4>
-                <p>Sciences Appliquées et Technologies</p>
-            </button>
-        </div>
+        @php
+            $ufrKeys = array_keys($ufrs);
+            $ufrCount = count($ufrKeys);
+            $rows = ceil(($ufrCount - 1) / 3); // -1 car la première UFR est déjà affichée
+        @endphp
 
-        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-            <button class="org-btn">
-                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-                <h4>UFR SAT</h4>
-                <p>Sciences Appliquées et Technologies</p>
-            </button>
-        </div>
-
-        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
-            <button class="org-btn">
-                <img src="{{ asset('images/sat.png') }}" alt="SAT Logo">
-                <h4>UFR SAT</h4>
-                <p>Sciences Appliquées et Technologies</p>
-            </button>
-        </div>
+        @for ($i = 1; $i < $ufrCount; $i++)
+            @if (($i - 1) % 3 == 0 && $i > 1)
+                </div><div class="row justify-content-center">
+            @endif
+            
+            <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="{{ 100 + ($i * 100) }}">
+                <a href="{{ route('student.register', ['ufr' => $ufrs[$ufrKeys[$i]]['code']]) }}" class="org-btn">
+                    <img src="{{ asset('images/' . $ufrs[$ufrKeys[$i]]['logo']) }}" alt="{{ $ufrs[$ufrKeys[$i]]['code'] }} Logo">
+                    <h4>UFR {{ $ufrs[$ufrKeys[$i]]['code'] }}</h4>
+                    <p>{{ $ufrs[$ufrKeys[$i]]['nom'] }}</p>
+                </a>
+            </div>
+        @endfor
     </div>
 </div>
   </section>

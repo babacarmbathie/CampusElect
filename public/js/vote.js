@@ -1,9 +1,11 @@
 // Variables globales
-let hasVoted = window.hasVoted || false;
-let votedCandidateId = window.votedCandidateId || null;
-let currentElectionId = window.currentElectionId || null;
+let hasVoted = window.electionConfig?.hasVoted || false;
+let votedCandidateId = window.electionConfig?.votedCandidateId || null;
+let currentElectionId = window.electionConfig?.currentElectionId || null;
 let currentCandidateId = null;
 let progressUpdateInterval = null;
+let csrfToken = window.electionConfig?.csrfToken || '';
+let voteEndpoint = window.electionConfig?.voteEndpoint || '/vote';
 
 // Vérification des variables requises
 if (currentElectionId === null) {
@@ -12,6 +14,7 @@ if (currentElectionId === null) {
 
 // Initialisation des barres de progression
 document.addEventListener('DOMContentLoaded', function() {
+  console.log("Configuration de l'élection:", window.electionConfig);
   if (hasVoted) {
     updateProgressBars();
     progressUpdateInterval = setInterval(updateProgressBars, 5000);
@@ -88,7 +91,17 @@ function confirmVote() {
     return;
   }
   
-  if (confirm("Confirmez-vous votre vote pour ce candidat ?\nCette action est irréversible.")) {
+  if (window.electionConfig?.isElectionClosed) {
+    alert(window.uiMessages?.electionClosed || "Cette élection est terminée.");
+    return;
+  }
+  
+  if (window.electionConfig?.hasNoElection) {
+    alert(window.uiMessages?.noElection || "Aucune élection n'est en cours.");
+    return;
+  }
+  
+  if (confirm(window.uiMessages?.confirmVote || "Confirmez-vous votre vote pour ce candidat ?\nCette action est irréversible.")) {
     submitVote();
   }
 }
@@ -96,7 +109,11 @@ function confirmVote() {
 // Soumission du vote avec gestion CSRF et erreurs
 function submitVote() {
   if (hasVoted || !currentCandidateId || !currentElectionId) {
-    console.error("Vote impossible : déjà voté ou données manquantes");
+    console.error("Vote impossible : déjà voté ou données manquantes", {
+      hasVoted,
+      currentCandidateId,
+      currentElectionId
+    });
     return;
   }
 
@@ -109,14 +126,13 @@ function submitVote() {
   voteBtn.disabled = true;
   voteBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Enregistrement...';
 
-  const csrfMeta = document.querySelector('meta[name="csrf-token"]');
-  if (!csrfMeta) {
-    console.error("Token CSRF manquant");
-    return;
-  }
-  const csrfToken = csrfMeta.content;
+  console.log("Envoi du vote:", {
+    candidate_id: currentCandidateId,
+    election_id: currentElectionId,
+    endpoint: voteEndpoint
+  });
 
-  fetch("/vote", {
+  fetch(voteEndpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -130,6 +146,7 @@ function submitVote() {
   })
   .then(async response => {
     const data = await response.json();
+    console.log("Réponse du serveur:", data);
     
     if (!response.ok) {
       throw new Error(data.message || "Erreur lors de l'enregistrement du vote");
