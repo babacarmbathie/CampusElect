@@ -25,16 +25,31 @@
 
   <!-- Contenu principal -->
   <main class="container my-5">
-
-
+    @if(isset($noElection) && $noElection)
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <h4>Aucune élection en cours</h4>
+            <p>Il n'y a actuellement aucune élection active. Veuillez revenir plus tard.</p>
+          </div>
+        </div>
+      </div>
+    @else
       <!-- Information sur l'élection -->
       <div class="row">
-          <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-            <h1 class="mb-2">Élections UFR SAT</h1>
-            <div class="election-status">
-              <span class="status-badge">Élection ouverte</span>
-            </div>
+        <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+          <h1 class="mb-2">Élections UFR {{ $currentElection->ufr }}</h1>
+          <div class="election-status">
+            @if($electionStatus == 1)
+              <span class="status-badge status-open">Élection ouverte</span>
+            @elseif($electionStatus == -1)
+              <span class="status-badge status-closed">Élection terminée</span>
+            @else
+              <span class="status-badge status-pending">Élection en attente</span>
+            @endif
           </div>
+        </div>
       </div>
 
       <div class="row mt-4">
@@ -42,69 +57,85 @@
           <div class="election-info" data-aos="fade-up">
             <div class="info-item">
               <i class="fas fa-calendar-alt"></i>
-              <span>Date limite : 30 Mars 2024</span>
+              <span>Date limite : {{ \Carbon\Carbon::parse($currentElection->end_date)->format('d F Y') }}</span>
             </div>
             <div class="info-item">
               <i class="fas fa-users"></i>
-              <span>Votants : 1500 étudiants</span>
+              <span>Votants : {{ \App\Models\Vote::where('election_id', $currentElection->id)->count() }} étudiants</span>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-user-graduate"></i>
+              <span>Inscrits : {{ \App\Models\Student::where('ufr', $currentElection->ufr)->count() }} étudiants</span>
             </div>
             <div class="info-item">
               <i class="fas fa-clock"></i>
-              <span>Temps restant : 5 jours</span>
+              <span>Temps restant : {{ \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($currentElection->end_date), false) }} jours</span>
             </div>
           </div>
         </div>
       </div>
 
-    <div class="row">
-      <div class="col-12">
-        <div class="row mt-5">
-          <div class="col-12 text-center mb-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="row mt-5">
+            <div class="col-12 text-center mb-4">
               <h2 class="section-title"><i class="fas fa-user-tie me-2"></i>Candidats</h2>
-              @if($vote)
+              @if($electionStatus == -1)
+                <p class="section-subtitle">Cette élection est terminée. Voici les résultats.</p>
+              @elseif($vote)
                 <p class="section-subtitle">Vous avez déjà voté pour un candidat</p>
               @else
-            <p class="section-subtitle">Sélectionnez votre candidat pour voter</p>
+                <p class="section-subtitle">Sélectionnez votre candidat pour voter</p>
               @endif
             </div>
-        </div>
-        
-        <div class="row" id="candidates-list">
-          @foreach($candidates as $candidate)
-            @php
-              $name = json_encode($candidate->name);
-              $program = json_encode(str_replace(["\r", "\n"], ' ', $candidate->program));
-              $photo = json_encode($candidate->photo_path);
-            @endphp
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card h-100 candidate-card" onclick="openCandidateModal({{ $name }}, {{ $program }}, {{ $photo }}, {{ $candidate->id }})">
-                <div class="candidate-img-container">
-                  <img src="{{ asset('storage/' . $candidate->photo_path) }}" class="candidate-img" alt="{{ $candidate->name }}">
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">
-                    {{ $candidate->name }}
-                    @if($vote && $vote->candidate_id === $candidate->id)
-                      <i class="fas fa-check-circle text-success ms-2"></i>
-                    @endif
-                  </h5>
-                  <p class="card-text">{{ Str::limit($candidate->program, 80) }}</p>
-                </div>
-                @if($vote)
-                  <div class="progress-container">
-                    <div class="progress">
-                      <div id="progress-{{ $candidate->id }}" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        <span>0%</span>
-                      </div>
+          </div>
+          
+          <div class="row" id="candidates-list">
+            @if(count($candidates) > 0)
+              @foreach($candidates as $candidate)
+                @php
+                  $name = json_encode($candidate->name);
+                  $program = json_encode(str_replace(["\r", "\n"], ' ', $candidate->program));
+                  $photo = json_encode($candidate->photo_path);
+                @endphp
+                <div class="col-lg-4 col-md-6 mb-4">
+                  <div class="card h-100 candidate-card" onclick="openCandidateModal({{ $name }}, {{ $program }}, {{ $photo }}, {{ $candidate->id }})">
+                    <div class="candidate-img-container">
+                      <img src="{{ asset('storage/' . $candidate->photo_path) }}" class="candidate-img" alt="{{ $candidate->name }}">
                     </div>
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        {{ $candidate->name }}
+                        @if($vote && $vote->candidate_id === $candidate->id)
+                          <i class="fas fa-check-circle text-success ms-2"></i>
+                        @endif
+                      </h5>
+                      <p class="card-text">{{ Str::limit($candidate->program, 80) }}</p>
+                    </div>
+                    @if($vote || $electionStatus == -1)
+                      <div class="progress-container">
+                        <div class="progress">
+                          <div id="progress-{{ $candidate->id }}" class="progress-bar" role="progressbar" style="width: {{ $candidate->vote_percentage }}%;" aria-valuenow="{{ $candidate->vote_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            <span>{{ $candidate->vote_percentage }}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    @endif
                   </div>
-                @endif
+                </div>
+              @endforeach
+            @else
+              <div class="col-12 text-center">
+                <div class="alert alert-info">
+                  <i class="fas fa-info-circle me-2"></i>
+                  Aucun candidat n'a été enregistré pour cette élection.
+                </div>
               </div>
-            </div>
-          @endforeach
+            @endif
+          </div>
         </div>
       </div>
-    </div>
+    @endif
   </main>
 
   <!-- Modal Candidat -->
@@ -141,10 +172,28 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Initialisation des variables globales avec les données de Laravel
-    window.hasVoted = {{ $vote ? 'true' : 'false' }};
-    window.votedCandidateId = {{ $vote ? $vote->candidate_id : 'null' }};
-    window.currentElectionId = {{ $currentElection->id }};
+    // Configuration globale de l'élection
+    window.electionConfig = {
+      hasVoted: {{ $vote ? 'true' : 'false' }},
+      votedCandidateId: {{ $vote ? $vote->candidate_id : 'null' }},
+      currentElectionId: {{ $currentElection ? $currentElection->id : 'null' }},
+      electionStatus: {{ $electionStatus ?? 0 }},
+      csrfToken: '{{ csrf_token() }}',
+      voteEndpoint: '{{ route("vote.store") }}',
+      isElectionOpen: {{ ($electionStatus ?? 0) == 1 ? 'true' : 'false' }},
+      isElectionClosed: {{ ($electionStatus ?? 0) == -1 ? 'true' : 'false' }},
+      hasNoElection: {{ ($electionStatus ?? 0) == 0 ? 'true' : 'false' }}
+    };
+
+    // Messages d'interface
+    window.uiMessages = {
+      voteSuccess: 'Votre vote a été enregistré avec succès !',
+      voteError: 'Une erreur est survenue lors de l\'enregistrement de votre vote.',
+      alreadyVoted: 'Vous avez déjà voté pour cette élection.',
+      electionClosed: 'Cette élection est terminée.',
+      noElection: 'Aucune élection n\'est en cours.',
+      confirmVote: 'Êtes-vous sûr de vouloir voter pour ce candidat ?'
+    };
   </script>
   <script src="{{ asset('js/vote.js') }}"></script>
 </body>
