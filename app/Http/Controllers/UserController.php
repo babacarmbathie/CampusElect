@@ -59,4 +59,35 @@ class UserController extends Controller
         
         return redirect()->route('etudiants.index')->with('success', 'Étudiant mis à jour avec succès');
     }
+
+    public function store(Request $request)
+    {
+        // Nettoyage et formatage du code étudiant
+        $formattedCode = strtoupper(str_replace(' ', '', $request->student_code));
+        $request->merge(['student_code' => $formattedCode]);
+
+        // Validation des données
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|regex:/^[^\s@]+@ugb\.edu\.sn$/|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students',
+        ]);
+
+        // Création de l'utilisateur
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'role' => 'student'
+        ]);
+
+        // Création de l'étudiant
+        \App\Models\Student::create([
+            'user_id' => $user->id,
+            'student_code' => $request->student_code,
+        ]);
+
+        return redirect()->route('admin.etudiants')->with('success', 'Étudiant ajouté avec succès');
+    }
 }

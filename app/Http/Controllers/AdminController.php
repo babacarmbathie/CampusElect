@@ -28,4 +28,15 @@ class AdminController extends Controller
 
         return view('admin.partials.etudiants', compact('users'));
     }
+
+    /**
+     * Récupère les données des candidats pour l'affichage dans le tableau de bord admin
+     */
+    public function getCandidatsData()
+    {
+        $elections = Election::all();
+        $candidates = Candidate::with('election')->get();
+
+        return view('admin.partials.candidats', compact('candidates', 'elections'));
+    }
 }

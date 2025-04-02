@@ -47,17 +47,16 @@ Route::prefix('admin')->group(function () {
     Route::prefix('etudiants')->group(function () {
         Route::get('/', [AdminController::class, 'etudiants'])->name('admin.etudiants');
         Route::get('/data', [AdminController::class, 'getEtudiantsData'])->name('admin.etudiants.data');
-        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('admin.etudiants.edit');
-        Route::put('/{id}', [UserController::class, 'update'])->name('admin.etudiants.update');
-        Route::delete('/{id}', [UserController::class, 'destroy'])->name('admin.etudiants.destroy');
+        Route::post('/', [StudentController::class, 'store'])->name('students.store');
+        Route::put('/{id}', [StudentController::class, 'update'])->name('students.update');
+        Route::delete('/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
     });
 
    // Gestion des candidats
-   Route::get('/candidats/data', function() {
-    $candidats = App\Models\User::where('role', 'candidate')->with('candidate')->paginate(10);
-    return view('admin.partials.candidats', compact('candidats'));
-})->name('admin.candidats.data');
+   Route::get('/candidats/data', [AdminController::class, 'getCandidatsData'])->name('admin.candidats.data');
 Route::post('/candidates', [CandidateController::class, 'store'])->name('candidates.store');
+Route::put('/candidates/{candidate}', [CandidateController::class, 'update'])->name('candidates.update');
+Route::delete('/candidates/{candidate}', [CandidateController::class, 'destroy'])->name('candidates.destroy');
 });
 
 // Pour les besoins de développement - A supprimer en production

@@ -112,7 +112,7 @@
                 <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
                     <div class="team-card">
                         <div class="team-img-container">
-                            <img src="{{ asset('images/paco.jpg') }}" alt="Harouna DIAW" class="team-img">
+                            <img src=" " alt="Harouna DIAW" class="team-img">
                             <div class="team-overlay"></div>
                         </div>
                         <h3>Harouna DIAW</h3>
