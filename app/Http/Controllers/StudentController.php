@@ -134,4 +134,92 @@ class StudentController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        // Nettoyage et formatage du code étudiant
+        $formattedCode = strtoupper(str_replace(' ', '', $request->student_code));
+        $request->merge(['student_code' => $formattedCode]);
+
+        // Validation des données
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|regex:/^[^\s@]+@ugb\.edu\.sn$/|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students',
+        ]);
+
+        // Création de l'utilisateur
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            
+        ]);
+
+        // Création de l'étudiant
+        Student::create([
+            'user_id' => $user->id,
+            'student_code' => $request->student_code,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Étudiant ajouté avec succès',
+            'redirect' => route('admin.etudiants')
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        
+        // Nettoyage et formatage du code étudiant
+        $formattedCode = strtoupper(str_replace(' ', '', $request->student_code));
+        $request->merge(['student_code' => $formattedCode]);
+        
+        // Validation des données
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students,student_code,'.$user->student->id
+        ]);
+        
+        // Mise à jour de l'utilisateur
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+        
+        // Mise à jour de l'étudiant
+        $user->student->update([
+            'student_code' => $request->student_code
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Étudiant mis à jour avec succès',
+        ]);
+    }
+    
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        
+        // Supprimer d'abord l'étudiant associé
+        if ($user->student) {
+            $user->student->delete();
+        }
+        
+        // Supprimer les votes associés à l'étudiant si nécessaire
+        // (Ce bloc pourrait être déplacé dans un observer pour plus de propreté)
+        
+        // Puis supprimer l'utilisateur
+        $user->delete();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Étudiant supprimé avec succès'
+        ]);
+    }
+
 }

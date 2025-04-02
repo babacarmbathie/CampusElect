@@ -13,6 +13,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     // Masquer le mot de passe et autres attributs sensibles

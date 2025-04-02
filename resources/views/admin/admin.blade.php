@@ -255,6 +255,19 @@
             width: calc(100% - var(--sidebar-width-collapsed));
         }
 
+        /* Styles pour les modals */
+        .modal-backdrop {
+            z-index: 99990 !important;
+        }
+        
+        .modal {
+            z-index: 99999 !important;
+        }
+        
+        .modal-content {
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5) !important;
+        }
+
         .section {
             display: none;
             animation: fadeIn 0.4s ease-in-out;
@@ -407,6 +420,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     $(document).ready(function() {
@@ -429,6 +443,31 @@
                 $('.section').removeClass('active');
                 $('#' + $(this).data('section')).addClass('active');
             }
+        });
+        
+        // Assurer que les modals s'affichent correctement
+        $(document).on('show.bs.modal', '.modal', function (event) {
+            // Définir un z-index élevé
+            $(this).css('z-index', '99999999');
+            
+            // S'assurer que le backdrop est derrière le modal mais devant tout le reste
+            setTimeout(() => {
+                $('.modal-backdrop').css('z-index', '99999990');
+            }, 0);
+            
+            // Désactiver le pointer-events sur tous les éléments sauf le modal
+            $('body > *:not(.modal):not(.modal-backdrop)').css({
+                'pointer-events': 'none',
+                'filter': 'blur(1px)'
+            });
+        });
+        
+        // Restaurer l'interaction normale après fermeture du modal
+        $(document).on('hidden.bs.modal', '.modal', function (event) {
+            $('body > *').css({
+                'pointer-events': '',
+                'filter': ''
+            });
         });
     });
     </script>
