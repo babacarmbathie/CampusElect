@@ -345,6 +345,39 @@
             }
         }
     </style>
+
+    <!-- Styles globaux pour les modaux et SweetAlert2 -->
+    <style>
+        /* Z-index élevés pour les modaux */
+        .modal {
+            z-index: 99999999 !important;
+        }
+        
+        .modal-backdrop {
+            z-index: 99999990 !important;
+        }
+        
+        /* Styles pour SweetAlert2 */
+        .swal2-container {
+            z-index: 999999999 !important;
+        }
+        
+        .swal2-popup {
+            border-radius: 15px !important;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5) !important;
+        }
+        
+        .swal2-title {
+            color: var(--primary-color) !important;
+        }
+        
+        /* Assurer que la boîte de dialogue est bien centrée */
+        .modal-dialog-centered {
+            display: flex !important;
+            align-items: center !important;
+            min-height: calc(100% - 3.5rem) !important;
+        }
+    </style>
 </head>
 <body>
     <div class="d-flex">
@@ -445,30 +478,66 @@
             }
         });
         
-        // Assurer que les modals s'affichent correctement
-        $(document).on('show.bs.modal', '.modal', function (event) {
-            // Définir un z-index élevé
-            $(this).css('z-index', '99999999');
-            
-            // S'assurer que le backdrop est derrière le modal mais devant tout le reste
-            setTimeout(() => {
-                $('.modal-backdrop').css('z-index', '99999990');
-            }, 0);
-            
-            // Désactiver le pointer-events sur tous les éléments sauf le modal
-            $('body > *:not(.modal):not(.modal-backdrop)').css({
-                'pointer-events': 'none',
-                'filter': 'blur(1px)'
+        // Amélioration de l'affichage des modaux
+        function setupModals() {
+            // Gérer l'ouverture des modaux
+            $(document).on('show.bs.modal', '.modal', function(event) {
+                // Supprimer tous les backdrops existants pour éviter les superpositions
+                $('.modal-backdrop').remove();
+                
+                // Définir un z-index très élevé
+                $(this).css('z-index', '99999999');
+                
+                // S'assurer que le modal est visible et au premier plan
+                $(this).addClass('modal-force-top');
+                
+                // Temporisation pour s'assurer que le backdrop est correctement positionné
+                setTimeout(() => {
+                    $('.modal-backdrop').css({
+                        'z-index': '99999990',
+                        'opacity': '0.5'
+                    });
+                    
+                    // Désactiver les interactions avec les éléments en arrière-plan
+                    $('body').addClass('modal-open');
+                    $('body > *:not(.modal):not(.modal-backdrop):not(.swal2-container)').css({
+                        'pointer-events': 'none'
+                    });
+                }, 10);
             });
-        });
+            
+            // Gérer la fermeture des modaux
+            $(document).on('hidden.bs.modal', '.modal', function(event) {
+                // Supprimer les classes et styles ajoutés
+                $(this).removeClass('modal-force-top');
+                
+                // Réactiver les interactions
+                $('body > *').css({
+                    'pointer-events': '',
+                    'filter': ''
+                });
+                
+                // Nettoyer tout backdrop résiduel
+                if ($('.modal:visible').length === 0) {
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open');
+                }
+            });
+        }
         
-        // Restaurer l'interaction normale après fermeture du modal
-        $(document).on('hidden.bs.modal', '.modal', function (event) {
-            $('body > *').css({
-                'pointer-events': '',
-                'filter': ''
-            });
-        });
+        // Initialiser la configuration des modaux
+        setupModals();
+        
+        // Assurer que SweetAlert2 s'affiche toujours au-dessus de tout
+        const originalSwal = Swal.fire;
+        Swal.fire = function() {
+            // Nettoyer tout backdrop et modal ouvert
+            $('.modal-backdrop').remove();
+            $('.modal').modal('hide');
+            
+            // Appeler la fonction originale avec les arguments
+            return originalSwal.apply(this, arguments);
+        };
     });
     </script>
 </body>

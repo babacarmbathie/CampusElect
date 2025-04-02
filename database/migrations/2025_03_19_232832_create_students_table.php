@@ -13,6 +13,7 @@ class CreateStudentsTable extends Migration
             // Référence à l'utilisateur de base
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('student_code')->unique();
+            $table->enum('ufr', ['SAT', 'SJP', '2S', 'S2ATA', 'SEFS', 'LSH', 'SEG']);
             $table->timestamps();
         });
     }

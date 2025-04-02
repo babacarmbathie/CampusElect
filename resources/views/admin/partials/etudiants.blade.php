@@ -4,7 +4,7 @@
     <!-- En-tête de la section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0" style="color: var(--primary-color);"><i class="fas fa-user-graduate me-2"></i>Gestion des Étudiants</h4>
-        <button type="button" class="btn btn-primary px-4 py-2" id="showFormBtn" onclick="showForm()" 
+        <button type="button" class="btn btn-primary px-4 py-2" id="showFormBtn" onclick="showStudentForm()" 
                 style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%); border: none;">
             <i class="fas fa-user-plus me-2"></i> Nouvel Étudiant
         </button>
@@ -297,16 +297,16 @@
 </div>
 
 <!-- Container modal universel fixé - Ne bouge jamais -->
-<div id="fixedModalContainer" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999999; pointer-events:none;">
+<div id="fixedModalContainer" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:99999999; pointer-events:none;">
     <div id="fixedModalBackdrop" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.7); pointer-events:all;"></div>
-    <div id="fixedModalContent" class="card border-0 shadow-lg" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; max-width:800px; pointer-events:all; border-radius:15px; overflow:hidden;"></div>
+    <div id="fixedModalContent" class="card border-0 shadow-lg modal-force-top" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:90%; max-width:800px; pointer-events:all; border-radius:15px; overflow:hidden; transition: none !important; will-change: transform; transform-style: preserve-3d; backface-visibility: hidden;"></div>
 </div>
 
 <!-- Scripts et Styles supplémentaires -->
 <script type="text/javascript">
     // Fonction globale pour afficher le formulaire
-    function showForm() {
-        console.log("Fonction showForm appelée");
+    function showStudentForm() {
+        console.log("Fonction showStudentForm appelée");
         var formContainer = document.getElementById('studentFormContainer');
         var showFormBtn = document.getElementById('showFormBtn');
         
@@ -324,8 +324,8 @@
     }
 
     // Fonction pour cacher le formulaire
-    function hideForm() {
-        console.log("Fonction hideForm appelée");
+    function hideStudentForm() {
+        console.log("Fonction hideStudentForm appelée");
         var formContainer = document.getElementById('studentFormContainer');
         var showFormBtn = document.getElementById('showFormBtn');
         
@@ -344,7 +344,7 @@
         if (cancelFormBtn) {
             cancelFormBtn.onclick = function() {
                 console.log("Bouton annuler cliqué");
-                hideForm();
+                hideStudentForm();
             };
         }
 
@@ -477,115 +477,178 @@
 
     // Fonction pour éditer un étudiant
     function editStudent(studentId) {
+        // Fermer tout modal actif
+        $('.modal').modal('hide');
+        
+        // Nettoyer les backdrops
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+            backdrop.remove();
+        });
+        
+        // Récupérer le contenu du modal d'édition
+        const modalElement = document.getElementById(`editStudentModal${studentId}`);
+        if (!modalElement) return;
+        
         // Sauvegarder la position de défilement et désactiver le défilement
         savedScrollPosition = disableScrolling();
         
-        // Afficher le modal d'édition en utilisant Bootstrap
-        const modal = new bootstrap.Modal(document.getElementById(`editStudentModal${studentId}`));
-        modal.show();
+        // Charger le contenu dans le container fixe
+        const modalContent = document.getElementById('fixedModalContent');
+        const modalBackdrop = document.getElementById('fixedModalBackdrop');
+        const modalContainer = document.getElementById('fixedModalContainer');
         
-        // Configuration de la soumission du formulaire d'édition
-        $(`#editStudentForm${studentId}`).on('submit', function(e) {
-            e.preventDefault();
-            
-            // Récupérer les données du formulaire
-            const formData = new FormData(this);
-            
-            // Envoyer la requête AJAX pour mettre à jour l'étudiant
-            $.ajax({
-                url: `/admin/etudiants/${studentId}`,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'X-HTTP-Method-Override': 'PUT'
-                },
-                beforeSend: function() {
-                    // Afficher l'indicateur de chargement
-                    $(e.target).find('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Traitement...');
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Fermer le modal
-                        modal.hide();
-                        
-                        // Afficher un message de succès
-                        Swal.fire({
-                            title: 'Succès!',
-                            text: response.message,
-                            icon: 'success',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#5E2C1A'
-                        }).then(() => {
-                            // Recharger la page pour afficher les modifications
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Erreur!',
-                            text: response.message || 'Une erreur est survenue lors de la mise à jour de l\'étudiant.',
-                            icon: 'error',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#5E2C1A'
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    // Gérer les erreurs de validation
-                    if (xhr.status === 422) {
-                        const errors = xhr.responseJSON.errors;
-                        let errorMessage = 'Veuillez corriger les erreurs suivantes:<br>';
-                        
-                        for (const field in errors) {
-                            errorMessage += `- ${errors[field][0]}<br>`;
-                        }
-                        
-                        Swal.fire({
-                            title: 'Validation échouée!',
-                            html: errorMessage,
-                            icon: 'error',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#5E2C1A'
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Erreur!',
-                            text: 'Une erreur est survenue lors de la mise à jour de l\'étudiant.',
-                            icon: 'error',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#5E2C1A'
-                        });
-                    }
-                },
-                complete: function() {
-                    // Réactiver le bouton de soumission
-                    $(e.target).find('button[type="submit"]').prop('disabled', false).html('<i class="fas fa-save me-2"></i>Enregistrer');
+        // Copier le contenu HTML du modal d'édition dans le modal fixe
+        modalContent.innerHTML = modalElement.querySelector('.modal-content').outerHTML;
+        
+        // Remplacer le bouton de fermeture pour utiliser closeFixedModal
+        const closeButtons = modalContent.querySelectorAll('[data-bs-dismiss="modal"]');
+        closeButtons.forEach(button => {
+            button.setAttribute('onclick', 'closeFixedModal()');
+            button.removeAttribute('data-bs-dismiss');
+        });
+        
+        // Remplacer le formulaire pour qu'il utilise la bonne soumission
+        const form = modalContent.querySelector(`form`);
+        if (form) {
+            form.id = `editStudentFixedForm${studentId}`;
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                submitEditForm(studentId, this);
+            };
+        }
+        
+        // Ajouter un gestionnaire de clic pour le backdrop
+        modalBackdrop.onclick = closeFixedModal;
+        
+        // Afficher le modal fixe
+        modalContainer.style.display = 'block';
+        
+        // Ajouter un gestionnaire pour la touche Échap
+        document.addEventListener('keydown', handleEscapeKey);
+    }
+    
+    // Fonction pour soumettre le formulaire d'édition
+    function submitEditForm(studentId, form) {
+        // Récupérer les données du formulaire
+        const formData = new FormData(form);
+        
+        // Envoyer la requête AJAX pour mettre à jour l'étudiant
+        $.ajax({
+            url: `/admin/etudiants/${studentId}`,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'X-HTTP-Method-Override': 'PUT'
+            },
+            beforeSend: function() {
+                // Afficher l'indicateur de chargement
+                $(form).find('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Traitement...');
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Fermer le modal
+                    closeFixedModal();
                     
-                    // Réactiver le défilement
-                    enableScrolling(savedScrollPosition);
+                    // Afficher un message de succès
+                    Swal.fire({
+                        title: 'Succès!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#5E2C1A'
+                    }).then(() => {
+                        // Recharger la page pour afficher les modifications
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Erreur!',
+                        text: response.message || 'Une erreur est survenue lors de la mise à jour de l\'étudiant.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#5E2C1A'
+                    });
                 }
-            });
+            },
+            error: function(xhr) {
+                // Gérer les erreurs de validation
+                if (xhr.status === 422) {
+                    const errors = xhr.responseJSON.errors;
+                    let errorMessage = 'Veuillez corriger les erreurs suivantes:<br>';
+                    
+                    for (const field in errors) {
+                        errorMessage += `- ${errors[field][0]}<br>`;
+                    }
+                    
+                    Swal.fire({
+                        title: 'Validation échouée!',
+                        html: errorMessage,
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#5E2C1A'
+                    });
+            } else {
+                    Swal.fire({
+                        title: 'Erreur!',
+                        text: 'Une erreur est survenue lors de la mise à jour de l\'étudiant.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#5E2C1A'
+                    });
+                }
+            },
+            complete: function() {
+                // Réactiver le bouton de soumission
+                $(form).find('button[type="submit"]').prop('disabled', false).html('<i class="fas fa-save me-2"></i>Enregistrer');
+            }
         });
     }
 
     // Fonction pour confirmer la suppression d'un étudiant
     function confirmDeleteStudent(studentId) {
-        Swal.fire({
-            title: 'Êtes-vous sûr?',
-            text: "Cette action est irréversible, l'étudiant et toutes ses données seront supprimés!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Oui, supprimer!',
-            cancelButtonText: 'Annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteStudent(studentId);
-            }
+        // Fermer tout modal actif
+        $('.modal').modal('hide');
+        
+        // Assurer que tous les backdrops sont supprimés
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+            backdrop.remove();
         });
+        
+        // Utiliser setTimeout pour assurer que l'ouverture de SweetAlert se fait après la fermeture des modals
+        setTimeout(() => {
+            Swal.fire({
+                title: 'Êtes-vous sûr?',
+                text: "Cette action est irréversible, l'étudiant et toutes ses données seront supprimés!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer!',
+                cancelButtonText: 'Annuler',
+                customClass: {
+                    container: 'swal-container',
+                    popup: 'swal-popup',
+                    header: 'swal-header',
+                    title: 'swal-title',
+                    closeButton: 'swal-close-button',
+                    icon: 'swal-icon',
+                    image: 'swal-image',
+                    content: 'swal-content',
+                    input: 'swal-input',
+                    actions: 'swal-actions',
+                    confirmButton: 'swal-confirm-button',
+                    cancelButton: 'swal-cancel-button',
+                    footer: 'swal-footer'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteStudent(studentId);
+                }
+            });
+        }, 100);
     }
 
     // Fonction pour supprimer un étudiant
@@ -758,37 +821,58 @@
 
     /* Styles supplémentaires pour éviter les problèmes */
     #fixedModalContainer {
-        will-change: transform;
-        transform-style: preserve-3d;
-        backface-visibility: hidden;
-        perspective: 1000px;
-        transform: translateZ(0);
-        -webkit-font-smoothing: subpixel-antialiased;
+        z-index: 99999999 !important;
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+        perspective: 1000px !important;
+        transform: translateZ(0) !important;
+        -webkit-font-smoothing: subpixel-antialiased !important;
     }
 
+    #fixedModalBackdrop {
+        z-index: 99999990 !important;
+        background-color: rgba(0, 0, 0, 0.7) !important;
+        transform: translateZ(0) !important;
+    }
+    
     #fixedModalContent {
+        z-index: 99999999 !important;
         box-shadow: 0 10px 50px rgba(0,0,0,0.5) !important;
-        will-change: transform;
-        transform-style: preserve-3d;
-        backface-visibility: hidden;
-        perspective: 1000px;
-        transform: translate(-50%, -50%) translateZ(0);
-        -webkit-font-smoothing: subpixel-antialiased;
+        will-change: transform !important;
+        transform-style: preserve-3d !important;
+        backface-visibility: hidden !important;
+        perspective: 1000px !important;
+        transform: translate(-50%, -50%) translateZ(0) !important;
+        -webkit-font-smoothing: subpixel-antialiased !important;
+        transition: none !important;
+        animation: none !important;
     }
 
+    .modal-force-top {
+        z-index: 99999999 !important;
+    }
+
+    body.modal-open {
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        touch-action: none !important;
+    }
+    
     /* Empêcher les tremblements sur les éléments avec position: fixed */
     body {
         -webkit-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
     }
     
-    /* Styles pour s'assurer que les modaux Bootstrap sont bien affichés */
+    /* Styles pour s'assurer que les modals Bootstrap sont bien affichés */
     .modal {
-        z-index: 99999 !important;
+        z-index: 9999999 !important;
     }
     
     .modal-backdrop {
-        z-index: 99990 !important;
+        z-index: 9999990 !important;
     }
     
     .modal-content {
@@ -799,5 +883,37 @@
     
     .modal-header {
         border-radius: 15px 15px 0 0 !important;
+    }
+    
+    /* Styles pour fixer les problèmes de positionnement des modaux */
+    .modal-dialog-centered {
+        display: flex !important;
+        align-items: center !important;
+        min-height: calc(100% - 3.5rem) !important;
+    }
+    
+    /* Styles spécifiques pour SweetAlert2 */
+    .swal2-container {
+        z-index: 999999999 !important;
+    }
+    
+    .swal2-popup {
+        border-radius: 15px !important;
+        box-shadow: 0 10px 50px rgba(0,0,0,0.5) !important;
+    }
+    
+    .swal2-title {
+        color: var(--primary-color) !important;
+    }
+    
+    .swal-container, 
+    .swal-popup,
+    .swal-header,
+    .swal-title,
+    .swal-content,
+    .swal-actions,
+    .swal-confirm-button,
+    .swal-cancel-button {
+        z-index: 999999999 !important;
     }
 </style>
