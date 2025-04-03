@@ -31,7 +31,6 @@ class StudentController extends Controller
             'email' => 'required|string|email|regex:/^[^\s@]+@ugb\.edu\.sn$/|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students',
-            'ufr' => 'required|in:SAT,SJP,2S,S2ATA,SEFS,LSH,SEG',
         ]);
 
         // Création de l'utilisateur
@@ -45,7 +44,6 @@ class StudentController extends Controller
         Student::create([
             'user_id' => $user->id,
             'student_code' => $validated['student_code'],
-            'ufr' => $validated['ufr'],
         ]);
 
         return redirect()->route('student.login.form')->with('success', 'Inscription réussie, veuillez vous connecter.');
@@ -173,34 +171,65 @@ class StudentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        
-        // Nettoyage et formatage du code étudiant
-        $formattedCode = strtoupper(str_replace(' ', '', $request->student_code));
-        $request->merge(['student_code' => $formattedCode]);
-        
-        // Validation des données
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'student_code' => 'required|string|regex:/^P[0-9]+$/|unique:students,student_code,'.$user->student->id
-        ]);
-        
-        // Mise à jour de l'utilisateur
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-        
-        // Mise à jour de l'étudiant
-        $user->student->update([
-            'student_code' => $request->student_code
-        ]);
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Étudiant mis à jour avec succès',
-        ]);
+        try {
+            $user = User::findOrFail($id);
+            
+            // Nettoyage et formatage du code étudiant
+            $formattedCode = strtoupper(str_replace(' ', '', $request->student_code));
+            $request->merge(['student_code' => $formattedCode]);
+            
+            // Validation des données
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'regex:/^[^\s@]+@ugb\.edu\.sn$/',
+                    'max:255',
+                    'unique:users,email,'.$user->id
+                ],
+                'student_code' => [
+                    'required',
+                    'string',
+                    'regex:/^P[0-9]+$/',
+                    'unique:students,student_code,'.$user->student->id
+                ]
+            ]);
+            
+            // Mise à jour de l'utilisateur
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+            
+            // Mise à jour de l'étudiant
+            $user->student->update([
+                'student_code' => $request->student_code
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Étudiant mis à jour avec succès'
+            ], 200);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Étudiant non trouvé'
+            ], 404);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de validation',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue lors de la mise à jour'
+            ], 500);
+        }
     }
     
     public function destroy($id)

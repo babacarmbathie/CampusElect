@@ -69,7 +69,7 @@
             </div>
             <div class="info-item">
               <i class="fas fa-clock"></i>
-              <span>Temps restant : {{ \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($currentElection->end_date), false) }} jours</span>
+              <span id="countdown">Temps restant : {{ \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($currentElection->end_date), false) }} jours</span>
             </div>
           </div>
         </div>
@@ -182,7 +182,8 @@
       voteEndpoint: '{{ route("vote.store") }}',
       isElectionOpen: {{ ($electionStatus ?? 0) == 1 ? 'true' : 'false' }},
       isElectionClosed: {{ ($electionStatus ?? 0) == -1 ? 'true' : 'false' }},
-      hasNoElection: {{ ($electionStatus ?? 0) == 0 ? 'true' : 'false' }}
+      hasNoElection: {{ ($electionStatus ?? 0) == 0 ? 'true' : 'false' }},
+      endDate: '{{ $currentElection ? $currentElection->end_date : '' }}'
     };
 
     // Messages d'interface
@@ -194,6 +195,36 @@
       noElection: 'Aucune élection n\'est en cours.',
       confirmVote: 'Êtes-vous sûr de vouloir voter pour ce candidat ?'
     };
+
+    // Fonction de mise à jour du compte à rebours
+    function updateCountdown() {
+      const endDate = new Date(window.electionConfig.endDate).getTime();
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      const countdownElement = document.getElementById('countdown');
+      if (countdownElement) {
+        if (distance < 0) {
+          countdownElement.innerHTML = '<span class="text-danger">Élection terminée</span>';
+          if (window.electionConfig.isElectionOpen) {
+            window.location.reload(); // Recharger si l'élection vient de se terminer
+          }
+        } else {
+          countdownElement.innerHTML = `Temps restant : ${days}j ${hours}h ${minutes}m ${seconds}s`;
+        }
+      }
+    }
+
+    // Mettre à jour le compte à rebours toutes les secondes
+    if (window.electionConfig.isElectionOpen) {
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
   </script>
   <script src="{{ asset('js/vote.js') }}"></script>
 </body>

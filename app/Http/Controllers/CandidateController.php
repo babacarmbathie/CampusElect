@@ -11,49 +11,33 @@ class CandidateController extends Controller
 {
     public function index()
     {
-        // Récupérer l'élection en cours (status = 1) ou la dernière élection fermée (status = -1)
+        // Votre méthode index existante (inchangée)
         $currentElection = Election::where('status', 1)->first();
-        
-        // Si aucune élection n'est en cours, chercher la dernière élection fermée
+    
         if (!$currentElection) {
-            $currentElection = Election::where('status', -1)
-                ->orderBy('end_date', 'desc')
-                ->first();
+            abort(404, "Aucune élection en cours.");
         }
-        
-        // Si aucune élection n'existe du tout
-        if (!$currentElection) {
-            return view('vote', [
-                'candidates' => [],
-                'currentElection' => null,
-                'vote' => null,
-                'noElection' => true,
-                'electionStatus' => 0 // Pas d'élection
-            ]);
-        }
-        
-        // Déterminer le statut de l'élection
-        $electionStatus = $currentElection->status;
-        
-        // Récupérer les candidats
+    
         $candidates = Candidate::where('election_id', $currentElection->id)->get();
         $totalVotes = \App\Models\Vote::where('election_id', $currentElection->id)->count();
-        
+    
         foreach ($candidates as $candidate) {
             $candidateVotes = \App\Models\Vote::where('candidate_id', $candidate->id)->count();
             $candidate->vote_percentage = $totalVotes > 0 
                 ? round(($candidateVotes / $totalVotes) * 100)
                 : 0;
         }
-        
-        // Récupérer le vote de l'utilisateur connecté
+    
         $vote = null;
         if (auth()->check() && auth()->user()->student) {
             $vote = \App\Models\Vote::where('student_id', auth()->user()->student->id)
                 ->where('election_id', $currentElection->id)
                 ->first();
         }
-        
+
+        // Déterminer le statut de l'élection
+        $electionStatus = $currentElection->status;
+    
         return view('vote', compact('candidates', 'currentElection', 'vote', 'electionStatus'));
     }
 

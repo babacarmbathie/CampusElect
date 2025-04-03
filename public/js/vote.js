@@ -173,7 +173,7 @@ function submitVote() {
       voteMsg.textContent = data.message || "Merci pour votre vote !";
       voteMsg.classList.remove('d-none');
 
-      // Mettre à jour les barres de progression
+      // Mettre à jour immédiatement les barres de progression
       updateProgressBars();
       
       // Démarrer les mises à jour régulières
@@ -181,6 +181,11 @@ function submitVote() {
         clearInterval(progressUpdateInterval);
       }
       progressUpdateInterval = setInterval(updateProgressBars, 2000);
+      
+      // Recharger la page après 2 secondes pour afficher tous les changements
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
   })
   .catch(error => {
