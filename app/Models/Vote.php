@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
-    public $timestamps = false; // Si vous ne souhaitez qu'un created_at
+    public $timestamps = false;
 
     protected $fillable = [
         'student_id',

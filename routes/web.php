@@ -38,8 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vote', [CandidateController::class, 'index'])->name('vote.index');
     Route::post('/vote', [VoteController::class, 'store'])->name('vote.store');
     Route::get('/vote/progress', [VoteController::class, 'progress'])->name('vote.progress');
-    Route::get('/votes/data', [VoteController::class, 'getVotes'])->name('votes.getVotes');
-});
+    Route::get('/votes/data', [VoteController::class, 'getVotes'])->name('votes.data');});
 // Routes admin
 Route::prefix('admin')->group(function () {
 
